@@ -1,6 +1,6 @@
 package model;
 
-public class Product {
+public class Product implements Comparable<Product>{
     private String name;
     private String desc;
     private double price;
