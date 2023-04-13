@@ -82,5 +82,11 @@ public class Product implements Comparable<Product>{
     public void setPurchased(int purchased) {
         this.purchased = purchased;
     }
+
+    @Override
+    public int compareTo(Product o) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
     
 }
