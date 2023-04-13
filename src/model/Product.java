@@ -85,8 +85,23 @@ public class Product implements Comparable<Product>{
 
     @Override
     public int compareTo(Product o) {
-        // TODO Auto-generated method stub
-        return 0;
+        int criteria = this.name.compareTo(o.name);
+        if(criteria==0){
+            criteria= this.desc.compareTo(o.desc);
+        }
+        if(criteria==0){
+            criteria= this.categories.compareTo(o.categories);
+        }
+        if(criteria==0){
+            criteria= (int)(this.price-o.price);
+        }
+        if(criteria==0){
+            criteria= this.quantity-o.quantity;
+        }
+        if(criteria==0){
+            criteria= this.purchased-o.purchased;
+        }
+        return criteria;
     }
     
 }
