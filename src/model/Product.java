@@ -102,5 +102,13 @@ public class Product implements Comparable<Product>{
         }
         return criteria;
     }
+
+    public CategoryProduct getCategories() {
+        return categories;
+    }
+
+    public void setCategories(CategoryProduct categories) {
+        this.categories = categories;
+    }
     
 }

@@ -15,14 +15,30 @@ public class Inventory{
     }
 
     public void addProduct(String name, String desc, double price, int quantity, int category){
+        boolean search;
         if(quantity<0||price<0.0){
             throw new NotNumberNegative();
+        }else{
+            search = searchExistenProduct(name, desc);
+            if(search==false){
+                Product nProduct= new Product(name, desc, price, quantity);
+                this.products.add(nProduct);
+                nProduct.chooseCategory(category);
+            }else{
+                System.out.println("Existent product");
+            }
         }
-        Product nProduct= new Product(name, desc, price, quantity);
-        this.products.add(nProduct);
-        nProduct.chooseCategory(category);
     }
     
+    private boolean searchExistenProduct(String name, String desc){
+        boolean exist= false;
+        for(Product p:products){
+            if(p.getName().equalsIgnoreCase(name) && p.getDesc().equalsIgnoreCase(desc)){
+                exist=true;
+            }
+        }
+        return exist;
+    }
     public void addOrder(String bName, ArrayList<Product> list, String date) throws ParseException{
         if(!list.isEmpty()){
             double totalPrice = calcTotal(list);
