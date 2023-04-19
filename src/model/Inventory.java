@@ -3,6 +3,8 @@ package model;
 import java.text.ParseException;
 import java.util.ArrayList;
 
+import exceptions.NotNumberNegative;
+
 public class Inventory{
     private ArrayList<Order> orders;
     private ArrayList<Product> products;
@@ -12,9 +14,15 @@ public class Inventory{
         products = new ArrayList<>();
     }
 
-    public void addProduct(String name, String desc, double price, int quantity, int category,int purchased){
-        products.add(new Product(name,desc,price,quantity,category,purchased));
+    public void addProduct(String name, String desc, double price, int quantity, int category){
+        if(quantity<0||price<0.0){
+            throw new NotNumberNegative();
+        }
+        Product nProduct= new Product(name, desc, price, quantity);
+        this.products.add(nProduct);
+        nProduct.chooseCategory(category);
     }
+    
     public void addOrder(String bName, ArrayList<Product> list, String date) throws ParseException{
         if(!list.isEmpty()){
             double totalPrice = calcTotal(list);

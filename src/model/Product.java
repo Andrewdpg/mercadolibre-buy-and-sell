@@ -9,41 +9,40 @@ public class Product implements Comparable<Product>{
     private CategoryProduct categories; 
     
     //Constructor
-    public Product(String name, String desc, double price, int quantity, int category,int purchased) {
+    public Product(String name, String desc, double price, int quantity) {
         this.name = name;
         this.desc = desc;
         this.price = price;
         this.quantity = quantity;
-        this.purchased = purchased;
-        categories = chooseCategory(category);
+        purchased=0;
     }
 
     //Method for choosing the category by a given int among 1 to 8.
     public CategoryProduct chooseCategory(int cat){
         switch(cat){
             case 1:
-                categories = CategoryProduct.BOOKS;
+                this.categories = CategoryProduct.BOOKS;
                 break;
             case 2:
-                categories = CategoryProduct.ELECTRONICS;
+                this.categories = CategoryProduct.ELECTRONICS;
                 break;
             case 3:
-                categories = CategoryProduct.APPAREL_AND_ACCESORIES;
+                this.categories = CategoryProduct.APPAREL_AND_ACCESORIES;
                 break;
             case 4:
-                categories = CategoryProduct.FOOD_AND_BEVERAGES;
+                this.categories = CategoryProduct.FOOD_AND_BEVERAGES;
                 break;
             case 5:
-                categories = CategoryProduct.STATIONERY;
+                this.categories = CategoryProduct.STATIONERY;
                 break;
             case 6:
-                categories = CategoryProduct.SPORTS;
+                this.categories = CategoryProduct.SPORTS;
                 break;
             case 7:
-                categories = CategoryProduct.BEAUTY_AND_PERSONAL_CARE_PRODUCTS;
+                this.categories = CategoryProduct.BEAUTY_AND_PERSONAL_CARE_PRODUCTS;
                 break;
             case 8:
-                categories = CategoryProduct.TOYS_AND_GAMES;
+                this.categories = CategoryProduct.TOYS_AND_GAMES;
                 break;
             default:
                 break;
