@@ -82,6 +82,19 @@ public class Inventory {
         return null;
     }
 
+    public void searchProductForPrice(int top, int bot){
+        ArrayList<Product> result = new ArrayList<>();
+        for(Product p:products){
+            if(p.getPrice()>= bot || p.getPrice()<=top){
+                result.add(p);
+            }
+        }
+        System.out.println("the products in the range between: " + top + bot +" are:" );
+        for(Product pp:result){
+            System.out.println(pp.getName() + "" + "" + pp.getPrice() );
+        }
+    }
+
     public ArrayList<Order> getOrders() {
         return orders;
     }
