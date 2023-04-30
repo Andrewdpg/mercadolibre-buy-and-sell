@@ -1,0 +1,39 @@
+public class Menu{
+    private final String MAIN_MENU= "1. Agregar producto al inventario\n"
+            +"2. Generar orden\n"
+            +"3. Buscar producto u orden\n"
+            +"4. Salir";
+    private final String FIRSTSEARCH_MENU= "¿Sobre que deseas buscar?:\n"
+            +"1. Productos\n"
+            +"2. Órdenes";
+    private final String SECONDSEARCHPRODUCT_MENU= "Buscar por:\n"
+            +"1. Nombre\n"
+            +"2. Precio\n"
+            +"3. Categoría\n"
+            +"4. Número de veces comprados";
+    private final String SECONDSEARCHORDER_MENU= "Buscar por:\n"
+            +"1. Nombre del comprador\n"
+            +"2. Precio total\n"
+            +"3. Fecha de compra\n"
+            +"4. Veces compradas";
+    private final String THIRDSEARCH_MENU="Buscar de manera:\n"
+            +"1. Ascedente\n"
+            +"2. Descendente";
+    private final String FOURTHSEARCHPRODUCT_MENU= "Buscar producto por ésta característica:\n"
+            +"1. Nombre (Alfabético)\n"
+            +"2. Descripción (Alfabético)\n"
+            +"3. Categoria\n"
+            +"4. Precio\n"
+            +"5. Cantidad disponible\n"
+            +"6. Número de veces comprado";
+    private final String FOURTHSEARCHORDER_MENU= "Buscar orden por ésta característica:\n"
+            +"1. Nombre del comprador (Alfabético)\n"
+            +"2. Número de productos comprados\n"
+            +"3. Precio total de compra\n"
+            +"4. Fecha de compra";
+    private final String AFTERSEARCHPRODUCT_MENU= "Opciones:\n"
+            +"1. Editar cantidad disponible\n"
+            +"2. Eliminar de inventario\n"
+            +"3. Regresar al menú principal";
+
+}
