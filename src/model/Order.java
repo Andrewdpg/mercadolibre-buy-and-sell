@@ -5,16 +5,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Order {
+public class Order implements Compare<Order>{
     private String bName;
     private ArrayList<Product> list;
     private Double totalPrice;
     private Date purchasedDate;
 
-    public Order(String bName, ArrayList<Product> list, double totalPrice, String date) throws ParseException {
+    public Order(String bName, ArrayList<Product> list, String date) throws ParseException {
         this.bName = bName;
         this.list = list;
-        this.totalPrice = totalPrice;
+        this.totalPrice = calcTotal(list);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         purchasedDate = dateFormat.parse(date);
     }
@@ -27,7 +27,7 @@ public class Order {
             case "total price":
                 return this.totalPrice.compareTo(other.getTotalPrice());
 
-                case "date":
+            case "date":
                 return this.purchasedDate.compareTo(other.getPurchasedDate());
             default:
                 break;
@@ -44,13 +44,22 @@ public class Order {
             case "total price":
                 return this.totalPrice.compareTo((Double) target);
 
-                case "date":
+            case "date":
                 return this.purchasedDate.compareTo((Date) target);
             default:
                 break;
         }
 
         return 0;
+    }
+    
+    
+    public double calcTotal(ArrayList<Product> list) {
+        double result = 0.0;
+        for (Product p : list) {
+            result += p.getPrice();
+        }
+        return result;
     }
 
     public String getbName() {
