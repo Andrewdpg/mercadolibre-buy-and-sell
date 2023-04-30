@@ -2,6 +2,8 @@ package model;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import exceptions.NotNumberNegative;
 
@@ -84,11 +86,10 @@ public class Inventory {
 
     public void searchProductForPrice(int top, int bot) {
         ArrayList<Product> result = new ArrayList<>();
-        for (Product p : products) {
-            if (p.getPrice() >= bot && p.getPrice() <= top) {
-                result.add(p);
-            }
-        }
+        
+        
+
+        
         System.out.println("the products in the range between: " + top + bot + " are:");
         for (Product pp : result) {
             System.out.println(pp.getName() + "" + "" + pp.getPrice());
@@ -101,17 +102,61 @@ public class Inventory {
 
     public void searchProductbyTimesBought(int top, int bot){
         ArrayList<Product> result = new ArrayList<>(products);
-        for(Product p:products){
-            if(p.getPurchased() <=top && p.getPurchased()>= bot){
-                result.add(p);
+        result = products;
+        
+        int start = findStartIndex(result, top);
+        int finish = findEndIndex(result, bot);
+
+        if (start == -1 || finish == -1) {
+            System.out.println("There are no products in that range.");
+        } else {
+            for (int i = start; i <= finish; i++) {
+                System.out.println("the products in the spected range are: ");
+                System.out.println(result.get(i));
             }
         }
-
-        System.out.println("the products in the range between: " + top + bot +" times bought are:" );
-        for (Product pp : result) {
-            System.out.println(pp.getName() + "" + "" + pp.getPrice());
-        }
     }
+
+
+
+    public  int findStartIndex(ArrayList<Product> array, int target) {
+        int left = 0;
+        int right = array.size() - 1;
+        int startIndex = -1;
+        
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            
+            if (array.get(mid).getPurchased() >= target) {
+                startIndex = mid;
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+        
+        return startIndex;
+    }
+
+    public  int findEndIndex(ArrayList<Product> array, int target) {
+        int left = 0;
+        int right = array.size() - 1;
+        int endIndex = -1;
+        
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            
+            if (array.get(mid).getPurchased() <= target) {
+                endIndex = mid;
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        
+        return endIndex;
+    }
+
 
     public ArrayList<Order> getOrders() {
         return orders;
