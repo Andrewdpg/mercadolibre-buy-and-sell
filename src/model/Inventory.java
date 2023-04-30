@@ -67,10 +67,10 @@ public class Inventory {
         Product current = null;
         current = searchProduct(name);
         if (current != null) {
-            int quantity= current.getQuantity()+cant;
+            int quantity = current.getQuantity() + cant;
             current.setQuantity(quantity);
         }
-        return "the new quantity for product: "+ name +" is: "+ current.getQuantity();
+        return "the new quantity for product: " + name + " is: " + current.getQuantity();
     }
 
     public Product searchProduct(String name) {
@@ -82,16 +82,34 @@ public class Inventory {
         return null;
     }
 
-    public void searchProductForPrice(int top, int bot){
+    public void searchProductForPrice(int top, int bot) {
         ArrayList<Product> result = new ArrayList<>();
-        for(Product p:products){
-            if(p.getPrice()>= bot || p.getPrice()<=top){
+        for (Product p : products) {
+            if (p.getPrice() >= bot && p.getPrice() <= top) {
                 result.add(p);
             }
         }
-        System.out.println("the products in the range between: " + top + bot +" are:" );
-        for(Product pp:result){
-            System.out.println(pp.getName() + "" + "" + pp.getPrice() );
+        System.out.println("the products in the range between: " + top + bot + " are:");
+        for (Product pp : result) {
+            System.out.println(pp.getName() + "" + "" + pp.getPrice());
+        }
+    }
+
+    public void searchProductbyCategory() {
+
+    }
+
+    public void searchProductbyTimesBought(int top, int bot){
+        ArrayList<Product> result = new ArrayList<>(products);
+        for(Product p:products){
+            if(p.getPurchased() <=top && p.getPurchased()>= bot){
+                result.add(p);
+            }
+        }
+
+        System.out.println("the products in the range between: " + top + bot +" times bought are:" );
+        for (Product pp : result) {
+            System.out.println(pp.getName() + "" + "" + pp.getPrice());
         }
     }
 
