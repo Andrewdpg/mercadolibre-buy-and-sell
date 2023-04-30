@@ -20,4 +20,10 @@ public enum CategoryProduct {
     "6. Sports.\n"+ 
     "7. Beauty and personal care products.\n"+
     "8. Toys and games.\n";
+
+    public static CategoryProduct chooseCategory(int cat) {
+        if (cat >= 1 && cat <= 8)
+            return CategoryProduct.values()[cat - 1];
+        return BOOKS;
+    }
 }
