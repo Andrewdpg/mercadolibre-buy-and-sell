@@ -3,9 +3,9 @@ package model;
 public class Product implements Comparable<Product>{
     private String name;
     private String desc;
-    private double price;
-    private int quantity;
-    private int purchased;
+    private Double price;
+    private Integer quantity;
+    private Integer purchased;
     private CategoryProduct categories; 
     
     //Constructor
@@ -48,6 +48,35 @@ public class Product implements Comparable<Product>{
                 break;
             }
         return categories;
+    }
+
+
+    public int compare(Product other, String attribute) {
+        switch (attribute) {
+            case "price":
+                return this.price.compareTo(other.price);
+            case "name":
+                return this.name.compareTo(other.name);
+            case "quantity":
+                return this.quantity.compareTo(other.quantity);
+            default:
+                break;
+        }
+        return this.name.compareTo(other.name);
+    }
+
+    public int compareAttr(Object target, String attribute) {
+        switch (attribute) {
+            case "price":
+                return this.price.compareTo((Double) target);
+            case "name":
+                return this.name.compareTo((String) target);
+            case "quantity":
+                return this.quantity.compareTo((Integer) target);
+            default:
+                break;
+        }
+        return 0;
     }
 
     //Getters and setters
