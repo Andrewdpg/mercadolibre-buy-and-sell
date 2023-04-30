@@ -8,7 +8,7 @@ import java.util.Date;
 public class Order {
     private String bName;
     private ArrayList<Product> list;
-    private double totalPrice;
+    private Double totalPrice;
     private Date purchasedDate;
 
     public Order(String bName, ArrayList<Product> list, double totalPrice, String date) throws ParseException {
@@ -17,6 +17,40 @@ public class Order {
         this.totalPrice = totalPrice;
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         purchasedDate = dateFormat.parse(date);
+    }
+
+    public int compare(Order other, String atribute) {
+        switch (atribute) {
+            case "name":
+                return this.bName.compareTo(other.getbName());
+
+            case "total price":
+                return this.totalPrice.compareTo(other.getTotalPrice());
+
+                case "date":
+                return this.purchasedDate.compareTo(other.getPurchasedDate());
+            default:
+                break;
+        }
+
+        return this.bName.compareTo(other.getbName());
+    }
+
+    public int compareAttr(Object target, String atributte) {
+        switch (atributte) {
+            case "name":
+                return this.bName.compareTo((String) target);
+
+            case "total price":
+                return this.totalPrice.compareTo((Double) target);
+
+                case "date":
+                return this.purchasedDate.compareTo((Date) target);
+            default:
+                break;
+        }
+
+        return 0;
     }
 
     public String getbName() {
