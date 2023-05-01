@@ -1,4 +1,4 @@
-package model;
+package util;
 
 public interface Compare<T> {
     public int compare(T other, String attribute);

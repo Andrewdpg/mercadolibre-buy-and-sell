@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 
 import exceptions.NotNumberNegative;
+import util.Filter;
+import util.Search;
 
 public class Inventory {
     private ArrayList<Order> orders;
@@ -19,7 +21,7 @@ public class Inventory {
         if (quantity < 0 || price < 0.0) {
             throw new NotNumberNegative();
         } else {
-            search = searchExistenProduct(name);
+            search = productExists(name);
             if (search == false) {
                 Product nProduct = new Product(name, desc, price, quantity);
                 this.products.add(nProduct);
@@ -28,10 +30,6 @@ public class Inventory {
                 System.out.println("Existent product");
             }
         }
-    }
-
-    private boolean searchExistenProduct(String name) {
-        return searchProductBy(products, name, name, "name") != null;
     }
 
     public void addOrder(String bName, ArrayList<Product> list, String date) throws ParseException {
@@ -43,7 +41,8 @@ public class Inventory {
 
     private void lessQuantityMorePurch(ArrayList<Product> list) {
         for (int i = 0; i < list.size(); i++) {
-            ArrayList<Product> result = searchProductBy(products, list.get(i).getName(), list.get(i).getName(), "name");
+            ArrayList<Product> result = Search.searchBy(products,
+                    new Filter(list.get(i).getName(), list.get(i).getName(), "name"));
             if (result != null) {
                 result.get(0).setQuantity(result.get(0).getQuantity() - list.get(i).getQuantity());
                 result.get(0).setQuantity(result.get(0).getPurchased() + list.get(i).getQuantity());
@@ -52,7 +51,7 @@ public class Inventory {
     }
 
     public String increaseQuantityProduct(String name, int cant) {
-        ArrayList<Product> result = searchProductBy(products, name, name, "name");
+        ArrayList<Product> result = Search.searchBy(products, new Filter(name, name, "name"));
         if (result != null) {
             result.get(0).setQuantity(result.get(0).getQuantity() + cant);
             return "the new quantity for product: " + name + " is: " + result.get(0).getQuantity();
@@ -61,7 +60,7 @@ public class Inventory {
     }
 
     public String decreaseQuantityProduct(String name, int cant) {
-        ArrayList<Product> result = searchProductBy(products, name, name, "name");
+        ArrayList<Product> result = Search.searchBy(products, new Filter(name, name, "name"));
         if (result != null) {
             result.get(0).setQuantity(result.get(0).getQuantity() - cant);
             return "the new quantity for product: " + name + " is: " + result.get(0).getQuantity();
@@ -69,43 +68,30 @@ public class Inventory {
         return "There was no product with that name";
     }
 
-    public String deleteProduct(String name, int cant) {
-        ArrayList<Product> result = searchProductBy(products, name, name, "name");
+    public String deleteProduct(String name) {
+        ArrayList<Product> result = Search.searchBy(products, new Filter(name, name, "name"));
         if (result != null) {
-            result.remove(0);
+            products.remove(result.get(0));
+            return "Product succsesfully deleted";
         }
         return "There was no product with that name";
     }
 
-    public ArrayList<Product> searchProductBy(Object top, Object bot, String attribute,
-            String orderedBy, boolean asc) {
-        ArrayList<Product> result = searchProductBy(products, top, bot, attribute);
+    private boolean productExists(String name) {
+        return Search.searchBy(products, new Filter(name, name, "name")) != null;
+    }
+
+    public ArrayList<Product> searchProductBy(String orderedBy, boolean asc, Filter... filters) {
+        ArrayList<Product> result = Search.searchBy(products, filters);
         if (result != null)
             Search.orderBy(result, orderedBy, asc);
         return result;
     }
 
-    public ArrayList<Product> searchProductBy(ArrayList<Product> array, Object top, Object bot, String attribute,
-            String orderedBy, boolean asc) {
-        ArrayList<Product> result = searchProductBy(array, top, bot, attribute);
+    public ArrayList<Order> searchOrderBy(String orderedBy, boolean asc, Filter... filters) {
+        ArrayList<Order> result = Search.searchBy(orders, filters);
         if (result != null)
             Search.orderBy(result, orderedBy, asc);
-        return result;
-    }
-
-    public ArrayList<Product> searchProductBy(ArrayList<Product> array, Object top, Object bot, String attribute) {
-        ArrayList<Product> elements = new ArrayList<>(array);
-        ArrayList<Product> result = null;
-        Search.orderBy(elements, attribute, true);
-        int start = Search.findStartIndex(elements, top, attribute);
-        int finish = Search.findEndIndex(elements, bot, attribute);
-
-        if (start != -1 && finish != -1) {
-            result = new ArrayList<>();
-            for (int i = start; i <= finish; i++) {
-                result.add(elements.get(i));
-            }
-        }
         return result;
     }
 

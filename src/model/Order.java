@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import util.Compare;
+
 public class Order implements Compare<Order>{
     private String bName;
     private ArrayList<Product> list;
@@ -42,7 +44,7 @@ public class Order implements Compare<Order>{
                 return this.bName.compareTo((String) target);
 
             case "total price":
-                return this.totalPrice.compareTo((Double) target);
+                return this.totalPrice.compareTo(Double.parseDouble(target.toString()));
 
             case "date":
                 return this.purchasedDate.compareTo((Date) target);
