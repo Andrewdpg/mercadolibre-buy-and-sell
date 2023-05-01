@@ -1,5 +1,7 @@
 package model;
 
+import util.Compare;
+
 public class Product implements Compare<Product> {
     private String name;
     private String desc;
@@ -34,7 +36,7 @@ public class Product implements Compare<Product> {
     public int compareAttr(Object target, String attribute) {
         switch (attribute) {
             case "price":
-                return this.price.compareTo((Double) target);
+                return this.price.compareTo(Double.valueOf(target.toString()));
             case "name":
                 return this.name.compareTo((String) target);
             case "quantity":
