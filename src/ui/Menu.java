@@ -1,5 +1,8 @@
 package ui;
 import model.Inventory;
+
+import org.junit.rules.TestRule;
+
 import model.CategoryProduct;
 
 public class Menu{
@@ -73,7 +76,82 @@ public class Menu{
         }
 
         private void searchThing(){
+                System.out.println(FIRSTSEARCH_MENU);
+                switch (option) {
+                        case 1:
+                                searchProduct();
+                                break;
+                        case 2:
+                                searchOrder();
+                                break;
+                        default:
+                                System.out.println("Opción no válida");
+                                break;
+                }
 
+        }
+
+        private void searchProduct(){
+                Object top, bot;
+                boolean asc = true;
+                String attr;
+                String variable;
+                System.out.println(SECONDSEARCHPRODUCT_MENU);
+                switch (option) {
+                        case 1:
+                                attr = "name";
+                                break;
+                        case 2:
+                                attr= "price";
+                                break;
+                        case 3:
+                                attr= "category";
+                                break;
+                        case 4:
+                                attr= "quantity";
+                                break;
+                        default:
+                                System.out.println("Opción no valida");
+                                break;
+                }
+                wayToSearch(asc);
+                System.out.println(FOURTHSEARCHPRODUCT_MENU);
+                switch (option) {
+                        case 1:
+                                variable = "name";
+                                break;
+                        case 2:
+                                variable= "price";
+                                break;
+                        case 3:
+                                variable= "category";
+                                break;
+                        case 4:
+                                variable= "quantity";
+                                break;
+                        default:
+                                System.out.println("Opción no valida");
+                                break;
+                }
+                //mercado.searchProductBy(top, bot, attr, variable, asc);
+                
+        }
+        private void searchOrder(){
+                
+        }
+        private void wayToSearch(boolean asc){
+                System.out.println(THIRDSEARCH_MENU);
+                switch (option) {
+                        case 1:
+                                asc=true;
+                                break;
+                        case 2:
+                                asc=false;
+                                break;
+                        default:
+                                asc=true;
+                                break;
+                }
         }
 
 
