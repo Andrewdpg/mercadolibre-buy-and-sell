@@ -1,6 +1,5 @@
 {
     "java.project.sourcePaths": [
-        "src",
-        "src\\ui"
+        "src"
     ]
 }
