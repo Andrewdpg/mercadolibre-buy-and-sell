@@ -1,5 +1,9 @@
 package ui;
 import model.Inventory;
+import model.Product;
+
+import java.text.ParseException;
+import java.util.ArrayList;
 
 import org.junit.rules.TestRule;
 
@@ -72,7 +76,17 @@ public class Menu{
         }
 
         private void addOrder(){
-                String name;
+                String name, date;
+                ArrayList<Product> list=null;
+                System.out.println("Nombre del comprador: ");
+                name = Reader.readString();
+                System.out.println("Fecha de la compra (dd/MM/yyyy): ");
+                date = Reader.readString();
+                try {
+                        mercado.addOrder(name, list, date);
+                } catch (ParseException e) {
+                        e.printStackTrace();
+                }
         }
 
         private void searchThing(){
@@ -137,7 +151,47 @@ public class Menu{
                 
         }
         private void searchOrder(){
-                
+                Object top, bot;
+                boolean asc = true;
+                String attr;
+                String variable;
+                System.out.println(SECONDSEARCHPRODUCT_MENU);
+                switch (option) {
+                        case 1:
+                                attr = "name";
+                                break;
+                        case 2:
+                                attr= "price";
+                                break;
+                        case 3:
+                                attr= "category";
+                                break;
+                        case 4:
+                                attr= "quantity";
+                                break;
+                        default:
+                                System.out.println("Opción no valida");
+                                break;
+                }
+                wayToSearch(asc);
+                System.out.println(FOURTHSEARCHPRODUCT_MENU);
+                switch (option) {
+                        case 1:
+                                variable = "name";
+                                break;
+                        case 2:
+                                variable= "price";
+                                break;
+                        case 3:
+                                variable= "category";
+                                break;
+                        case 4:
+                                variable= "quantity";
+                                break;
+                        default:
+                                System.out.println("Opción no valida");
+                                break;
+                }
         }
         private void wayToSearch(boolean asc){
                 System.out.println(THIRDSEARCH_MENU);
