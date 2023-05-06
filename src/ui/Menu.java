@@ -208,7 +208,13 @@ public class Menu{
                 }
         }
 
+        public void printMenu(){
+                System.out.println(MAIN_MENU);
+        }
 
+        public void executeInput(){
+                executeMainMenu();
+        }
 
         private void executeMainMenu(){
                 switch(option){
@@ -233,5 +239,8 @@ public class Menu{
 
         public boolean isRunning() {
                 return isRunning;
+        }
+        public void readOption() {
+                option = Reader.readInt(-1);
         }
 }
