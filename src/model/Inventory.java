@@ -77,7 +77,7 @@ public class Inventory {
         return "There was no product with that name";
     }
 
-    private boolean productExists(String name) {
+    public boolean productExists(String name) {
         return Search.searchBy(products, new Filter(name, name, "name")) != null;
     }
 
