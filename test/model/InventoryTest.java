@@ -75,6 +75,12 @@ public class InventoryTest {
         assertTrue(30, result.get(0).getQuantity);
     }
 
+    public void increaseNotFound(){
+        setupStage1();
+        inventory.increaseQuantityProduct("null", 24);
+        assertEquals("There was no product with that name");
+    }
+
     @Test
     public void increaseNegativeNumber() {
         try {
