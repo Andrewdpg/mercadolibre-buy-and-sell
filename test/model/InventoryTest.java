@@ -67,6 +67,13 @@ public class InventoryTest {
             assertTrue(true);
         }
     }
+    /*revisar */
+    public void decreseNotAfect(){
+        setupStage3();
+        inventory.decreaseQuantityProduct("Balon golty", 0);
+        ArrayList result = inventory.getProducts();
+        assertEqual(10,result.get(2).getQuantity);
+    }
 
     @Test
     public void increaseQuantityProduct() {
