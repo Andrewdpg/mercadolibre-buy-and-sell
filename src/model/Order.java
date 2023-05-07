@@ -25,6 +25,7 @@ public class Order implements Compare<Order> {
         this.totalPrice = calcTotal(list);
         this.totalProducts = totalProducts(list);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        dateFormat.setLenient(false);
         purchasedDate = dateFormat.parse(date);
     }
 

@@ -85,6 +85,7 @@ public class Reader {
                 return readDouble();
             case "date":
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                dateFormat.setLenient(false);
                 Date date = dateFormat.parse(readString());
                 return date;
             case "id":
