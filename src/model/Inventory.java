@@ -157,7 +157,7 @@ public class Inventory {
 
     public String generateOrderID(){
         String id = UUID.randomUUID().toString();
-        while(searchOrderBy("id", true, new Filter(id,id,"ID")) != null){
+        while(searchOrderBy("id", true, new Filter(id,id,"id")) != null){
             id = UUID.randomUUID().toString();
         }
         return id;
