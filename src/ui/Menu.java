@@ -91,6 +91,7 @@ public class Menu{
 
         private void searchThing(){
                 System.out.println(FIRSTSEARCH_MENU);
+                readOption();
                 switch (option) {
                         case 1:
                                 searchProduct();
@@ -111,6 +112,7 @@ public class Menu{
                 String attr;
                 String variable;
                 System.out.println(SECONDSEARCHPRODUCT_MENU);
+                readOption();
                 switch (option) {
                         case 1:
                                 attr = "name";
@@ -130,6 +132,7 @@ public class Menu{
                 }
                 wayToSearch(asc);
                 System.out.println(FOURTHSEARCHPRODUCT_MENU);
+                readOption();
                 switch (option) {
                         case 1:
                                 variable = "name";
@@ -156,6 +159,7 @@ public class Menu{
                 String attr;
                 String variable;
                 System.out.println(SECONDSEARCHPRODUCT_MENU);
+                readOption();
                 switch (option) {
                         case 1:
                                 attr = "name";
@@ -175,6 +179,7 @@ public class Menu{
                 }
                 wayToSearch(asc);
                 System.out.println(FOURTHSEARCHPRODUCT_MENU);
+                readOption();
                 switch (option) {
                         case 1:
                                 variable = "name";
@@ -195,6 +200,7 @@ public class Menu{
         }
         private void wayToSearch(boolean asc){
                 System.out.println(THIRDSEARCH_MENU);
+                readOption();
                 switch (option) {
                         case 1:
                                 asc=true;
