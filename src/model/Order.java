@@ -29,7 +29,7 @@ public class Order implements Compare<Order> {
     public int compare(Order other, String atribute) {
         switch (atribute) {
             case "name":
-                return this.bName.compareTo(other.getbName());
+                return this.bName.toLowerCase().compareTo(other.getbName().toLowerCase());
 
             case "total price":
                 return this.totalPrice.compareTo(other.getTotalPrice());
@@ -49,7 +49,7 @@ public class Order implements Compare<Order> {
     public int compareAttr(Object target, String atributte) {
         switch (atributte) {
             case "name":
-                return this.bName.compareTo((String) target);
+                return this.bName.toLowerCase().compareTo(((String) target).toLowerCase());
 
             case "total price":
                 return this.totalPrice.compareTo(Double.parseDouble(target.toString()));
@@ -68,7 +68,7 @@ public class Order implements Compare<Order> {
     public double calcTotal(ArrayList<Product> list) {
         double result = 0.0;
         for (Product p : list) {
-            result += p.getPrice() + p.getQuantity();
+            result += p.getPrice() * p.getQuantity();
         }
         return result;
     }

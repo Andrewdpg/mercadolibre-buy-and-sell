@@ -37,19 +37,19 @@ public class InventoryOrderTest {
         inventory = new Inventory();
 
         ArrayList<Product> orderA = new ArrayList<>();
-        orderA.add(new Product("A", "Descrip", 250000, 5));
+        orderA.add(new Product("A", "Descrip", 250000, 1));
 
         ArrayList<Product> orderB = new ArrayList<>();
-        orderB.add(new Product("B", "Descript", 15000, 6));
-        orderB.add(new Product("C", "Descrip", 80000, 5));
+        orderB.add(new Product("B", "Descript", 15000, 1));
+        orderB.add(new Product("C", "Descrip", 80000, 1));
 
         ArrayList<Product> orderC = new ArrayList<>();
-        orderC.add(new Product("D", "Descript", 13000, 5));
-        orderA.add(new Product("A", "Descrip", 250000, 5));
+        orderC.add(new Product("D", "Descript", 13000, 1));
+        orderC.add(new Product("A", "Descrip", 250000, 1));
 
         ArrayList<Product> orderD = new ArrayList<>();
-        orderD.add(new Product("F", "Descript", 500000, 2));
-        orderB.add(new Product("C", "Descrip", 80000, 5));
+        orderD.add(new Product("F", "Descript", 500000, 1));
+        orderD.add(new Product("C", "Descrip", 80000, 1));
 
         inventory.addOrder("Alfosno", orderA, "14/02/2022");
         inventory.addOrder("Enrique", orderB, "14/02/2022");
@@ -107,17 +107,18 @@ public class InventoryOrderTest {
         assertNull( result);
     }
 
+    
     @Test
     public void searchOrderByInitialName() throws ParseException {
         setupStage3();
-        ArrayList<Order> result = inventory.searchOrderBy("name", true, new Filter("A", "D", "name"));
+        ArrayList<Order> result = inventory.searchOrderBy("name", true, new Filter("D", "A", "name"));
         assertEquals(1, result.size());
     }
 
     @Test
     public void searchOrderByInitialName2() throws ParseException {
         setupStage3();
-        ArrayList<Order> result = inventory.searchOrderBy("name", true, new Filter("X", "Z", "name"));
+        ArrayList<Order> result = inventory.searchOrderBy("name", true, new Filter("z", "x", "name"));
         assertNull( result);
     }
 
@@ -126,7 +127,7 @@ public class InventoryOrderTest {
         setupStage3();
         ArrayList<Order> result = inventory.searchOrderBy("total price", true,
                 new Filter(251000   ,80000 , "total price"));
-        assertEquals(3, result.size());
+        assertEquals(2, result.size());
     }
 
     @Test
@@ -134,7 +135,7 @@ public class InventoryOrderTest {
         setupStage3();
         ArrayList<Order> result = inventory.searchOrderBy("total price", false,
                 new Filter ( 251000 , 80000, "total price"));
-        assertEquals(3, result.size());
+        assertEquals(2, result.size());
     }
     
 }
