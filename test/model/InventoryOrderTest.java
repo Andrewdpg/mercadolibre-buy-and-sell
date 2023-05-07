@@ -92,4 +92,5 @@ public class InventoryOrderTest {
                 new Filter(purchasedDate, purchasedDate, "date"));
         assertEquals("Enrique",result.get(0).getbName());
     }
+    
 }
