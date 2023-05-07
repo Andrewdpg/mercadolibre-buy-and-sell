@@ -37,4 +37,16 @@ Indicadores de calidad:
     - Confiabilidad = 0.71428571
     - Completitud = 3.5
   
+-iteracion 8:
+    - Densidad de errores-fallos = 0.228571
+    - Confiabilidad = 0.771428
+    - Completitud = 3.5
+  
+  
+-iteracion 9:
+    - Densidad de errores-fallos = 0.142857
+    - Confiabilidad = 0.857142
+    - Completitud = 3.5
+  
+  
   
