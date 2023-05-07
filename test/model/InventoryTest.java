@@ -1,13 +1,12 @@
 package model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
-import java.util.IllegalFormatException;
 
-import org.apiguardian.api.API;
 import org.junit.Test;
 
 import exceptions.NotNumberNegative;
@@ -33,75 +32,61 @@ public class InventoryTest {
         inventory.addProduct("Alexa", "Description3", 250000, 50, 2);
     }
 
-    public void setupStage4() {
-        inventory = new Inventory();
-        inventory.addProduct("Tablet samsung S7", "tablet blanca", 600000, 0, 2);
-    }
-
-    /* revisar */
     @Test
     public void lessQuantityProduct() {
         setupStage3();
-        ArrayList<Product> result = inventory.getProducts();
         inventory.decreaseQuantityProduct("Smart Watch Essen", 5);
-        assertTrue(5, result.get(0).getQuantity);
+        int result = inventory.getProducts().get(0).getQuantity();
+        assertEquals(5, result);
     }
 
     @Test
-    public void decreaseNegativaQuantity() {
-        try {
-            setupStage3();
-            inventory.decreaseQuantityProduct("Smart Watch Essen", -5);
-
-        } catch (NotNumberNegative ne) {
-            assertTrue(true);
-        }
-    }
-
-    public void decreseInNegative() {
-        try {
-            setupStage3();
-            inventory.decreaseQuantityProduct("Smart Watch Essen", 15);
-
-        } catch (NotNumberNegative ne) {
-            assertTrue(true);
-        }
-    }
-    /*revisar */
-    public void decreseNotAfect(){
+    public void decreaseNegativeQuantity() {
         setupStage3();
-        inventory.decreaseQuantityProduct("Balon golty", 0);
-        ArrayList result = inventory.getProducts();
-        assertEqual(10,result.get(2).getQuantity);
+        assertThrows(NotNumberNegative.class,
+                () -> inventory.decreaseQuantityProduct("Smart Watch Essen", -5));
+    }
+
+    @Test
+    public void decreseInNegative() {
+        setupStage3();
+        assertThrows(NotNumberNegative.class,
+                () -> inventory.decreaseQuantityProduct("Smart Watch Essen", 15));
+    }
+
+    @Test
+    public void decreseNotAfect() {
+        setupStage3();
+        assertEquals("the new quantity for product: Balon golty is: 10",
+                inventory.decreaseQuantityProduct("Balon golty", 0));
     }
 
     @Test
     public void increaseQuantityProduct() {
         setupStage3();
         inventory.increaseQuantityProduct("Smart Watch Essen", 20);
-        assertTrue(30, result.get(0).getQuantity);
+        int result = inventory.getProducts().get(0).getQuantity();
+        assertEquals(30, result);
     }
 
-    public void increaseNotFound(){
+    @Test
+    public void increaseNotFound() {
         setupStage1();
-        inventory.increaseQuantityProduct("null", 24);
-        assertEquals("There was no product with that name");
+        String result = inventory.increaseQuantityProduct("NONE", 24);
+        assertEquals("There was no product with that name", result);
     }
 
     @Test
     public void increaseNegativeNumber() {
-        try {
-            setupStage3();
-            inventory.increaseQuantityProduct("Smart Watch Essen", -10);
-
-        } catch (NotNumberNegative ne) {
-            assertTrue(true);
-        }
+        setupStage3();
+        assertThrows(NotNumberNegative.class,
+                () -> inventory.increaseQuantityProduct("Smart Watch Essen", -10));
     }
 
     @Test
     public void addProductWhithoutCant() {
-        setupStage4();
+        setupStage1();
+        inventory.addProduct("Tablet samsung S7", "tablet blanca", 600000, 0, 2);
         boolean result = inventory.productExists("Tablet samsung S7");
         assertTrue(result);
     }
@@ -116,34 +101,10 @@ public class InventoryTest {
     }
 
     @Test
-    public void addProductNegativaQuantity(){
-        try{
-            setupStage1();
-            inventory.addProduct("Desodorante", "Descripción", 2, -10, 6); 
-        }catch (NotNumberNegative ae){
-            assertTrue(true);
-        }
-        
-    }
-
-    @Test
-    public void addNotFormat(){
-        try{
-            setupStage1();
-            inventory.addProduct("Desodorante", "Descripción", 2, "str", 6); 
-        }catch (NumberFormatException nf){
-            assertTrue(true);
-        }
-    }
-
-    @Test
-    public void addOutParameter(){
-        try{
-            setupStage1();
-            inventory.addProduct("Desodorante", "Descripción", 2, "str", 20); 
-        }catch (IllegalFormatException ife){
-            assertTrue(true);
-        }
+    public void addProductNegativaQuantity() {
+        setupStage1();
+        assertThrows(NotNumberNegative.class,
+                () -> inventory.addProduct("Desodorante", "Descripción", 2, -10, 6));
     }
 
     @Test
