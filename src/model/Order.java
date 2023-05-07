@@ -8,6 +8,9 @@ import java.util.Date;
 import util.Compare;
 
 public class Order implements Compare<Order>{
+
+    public static final String PATH = "orders.json";
+
     private String bName;
     private ArrayList<Product> list;
     private Double totalPrice;

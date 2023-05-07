@@ -3,6 +3,9 @@ package model;
 import util.Compare;
 
 public class Product implements Compare<Product> {
+
+    public static final String PATH = "products.json";
+
     private String name;
     private String desc;
     private Double price;

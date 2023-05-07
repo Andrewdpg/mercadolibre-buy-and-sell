@@ -1,19 +1,54 @@
 package model;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 
 import exceptions.NotNumberNegative;
 import util.Filter;
 import util.Search;
+import util.Storage;
 
 public class Inventory {
     private ArrayList<Order> orders;
     private ArrayList<Product> products;
 
+    private int savingErrors;
+
     public Inventory() {
+        try {
+            loadData();
+        } catch (IOException e) {
+            System.out.println("Archivo/s corruptos. Información no cargada");
+            orders = new ArrayList<>();
+            products = new ArrayList<>();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void loadData() throws IOException {
         orders = new ArrayList<>();
         products = new ArrayList<>();
+        if (!Storage.fileExists(Order.PATH))
+            Storage.saveJsonTo(Order.PATH, orders);
+        if (!Storage.fileExists(Product.PATH))
+            Storage.saveJsonTo(Product.PATH, products);
+        orders = Storage.loadJsonFrom(Order.PATH, ArrayList.class);
+        products = Storage.loadJsonFrom(Product.PATH, ArrayList.class);
+    }
+
+    private void saveData() {
+        try {
+            Storage.saveJsonTo(Order.PATH, orders);
+            Storage.saveJsonTo(Product.PATH, products);
+            savingErrors = 0;
+        } catch (IOException e) {
+            savingErrors++;
+            if (savingErrors >= 2) {
+                System.out.println(
+                        "No se ha podido guardar la información, número de cambios no guardados: " + savingErrors);
+            }
+        }
     }
 
     public void addProduct(String name, String desc, double price, int quantity, int category) {
