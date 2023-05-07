@@ -7,17 +7,19 @@ import java.util.Date;
 
 import util.Compare;
 
-public class Order implements Compare<Order>{
+public class Order implements Compare<Order> {
 
     public static final String PATH = "orders.json";
 
     private String bName;
+    private String id;
     private ArrayList<Product> list;
     private Double totalPrice;
     private Date purchasedDate;
 
-    public Order(String bName, ArrayList<Product> list, String date) throws ParseException {
+    public Order(String bName, String id, ArrayList<Product> list, String date) throws ParseException {
         this.bName = bName;
+        this.id = id;
         this.list = list;
         this.totalPrice = calcTotal(list);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -34,6 +36,9 @@ public class Order implements Compare<Order>{
 
             case "date":
                 return this.purchasedDate.compareTo(other.getPurchasedDate());
+
+            case "id":
+                return this.id.compareTo(other.getId());
             default:
                 break;
         }
@@ -51,14 +56,15 @@ public class Order implements Compare<Order>{
 
             case "date":
                 return this.purchasedDate.compareTo((Date) target);
+            case "id":
+                return this.id.compareTo((String) target);
             default:
                 break;
         }
 
         return 0;
     }
-    
-    
+
     public double calcTotal(ArrayList<Product> list) {
         double result = 0.0;
         for (Product p : list) {
@@ -97,6 +103,14 @@ public class Order implements Compare<Order>{
 
     public void setPurchasedDate(Date purchasedDate) {
         this.purchasedDate = purchasedDate;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
 }

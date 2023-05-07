@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -77,7 +78,9 @@ public class Inventory {
 
     public void addOrder(String bName, ArrayList<Product> list, String date) throws ParseException {
         if(list != null && !list.isEmpty()){
-            orders.add(new Order(bName, list, date));
+            Order order = new Order(bName, generateOrderID(), list, date);
+            orders.add(order);
+            System.out.println("orden generada con ID: " + order.getId());
             lessQuantityMorePurch(list);
             // saveData(); Descomentar al final (no funcionan algunos tests porque siempre
                        // tiene todos los productos cargados 💀)
@@ -150,6 +153,14 @@ public class Inventory {
         if (result != null)
             Search.orderBy(result, orderedBy, asc);
         return result;
+    }
+
+    public String generateOrderID(){
+        String id = UUID.randomUUID().toString();
+        while(searchOrderBy("id", true, new Filter(id,id,"ID")) != null){
+            id = UUID.randomUUID().toString();
+        }
+        return id;
     }
 
     public ArrayList<Order> getOrders() {
