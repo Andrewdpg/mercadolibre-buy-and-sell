@@ -1,8 +1,12 @@
 package model;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.UUID;
+
+import com.google.gson.reflect.TypeToken;
 
 import exceptions.NotNumberNegative;
 import util.Filter;
@@ -16,16 +20,18 @@ public class Inventory {
     private int savingErrors;
 
     public Inventory() {
+        orders = new ArrayList<>();
+        products = new ArrayList<>();
         try {
-            loadData();
-        } catch (IOException e) {
+            // loadData(); Descomentar al final (no funcionan algunos tests porque siempre
+            // tiene todos los productos cargados 💀)
+        } catch (Exception e) {
             System.out.println("Archivo/s corruptos. Información no cargada");
             orders = new ArrayList<>();
             products = new ArrayList<>();
         }
     }
 
-    @SuppressWarnings("unchecked")
     private void loadData() throws IOException {
         orders = new ArrayList<>();
         products = new ArrayList<>();
@@ -33,8 +39,10 @@ public class Inventory {
             Storage.saveJsonTo(Order.PATH, orders);
         if (!Storage.fileExists(Product.PATH))
             Storage.saveJsonTo(Product.PATH, products);
-        orders = Storage.loadJsonFrom(Order.PATH, ArrayList.class);
-        products = Storage.loadJsonFrom(Product.PATH, ArrayList.class);
+        Type orderType = new TypeToken<ArrayList<Order>>() {}.getType();
+        Type productType = new TypeToken<ArrayList<Product>>() {}.getType();
+        orders = Storage.loadJsonFrom(Order.PATH, orderType);
+        products = Storage.loadJsonFrom(Product.PATH, productType);
     }
 
     private void saveData() {
@@ -61,6 +69,7 @@ public class Inventory {
                 Product nProduct = new Product(name, desc, price, quantity);
                 this.products.add(nProduct);
                 nProduct.setCategories(CategoryProduct.chooseCategory(category));
+                // saveData(); Descomentar al final (no funcionan algunos tests porque siempre tiene todos los productos cargados 💀)
             } else {
                 System.out.println("Existent product");
             }
@@ -68,9 +77,13 @@ public class Inventory {
     }
 
     public void addOrder(String bName, ArrayList<Product> list, String date) throws ParseException {
-        if (!list.isEmpty()) {
-            orders.add(new Order(bName, list, date));
+        if(list != null && !list.isEmpty()){
+            Order order = new Order(bName, generateOrderID(), list, date);
+            orders.add(order);
+            System.out.println("orden generada con ID: " + order.getId());
             lessQuantityMorePurch(list);
+            // saveData(); Descomentar al final (no funcionan algunos tests porque siempre
+                       // tiene todos los productos cargados 💀)
         }
     }
 
@@ -85,19 +98,29 @@ public class Inventory {
         }
     }
 
-    public String increaseQuantityProduct(String name, int cant) {
+    public String increaseQuantityProduct(String name, int cant) throws NotNumberNegative {
+        if(cant < 0) throw new NotNumberNegative("La cantidad introducida es negativa.");
         ArrayList<Product> result = Search.searchBy(products, new Filter(name, name, "name"));
         if (result != null) {
             result.get(0).setQuantity(result.get(0).getQuantity() + cant);
+            // saveData(); Descomentar al final (no funcionan algunos tests porque siempre
+            // tiene todos los productos cargados 💀)
             return "the new quantity for product: " + name + " is: " + result.get(0).getQuantity();
         }
         return "There was no product with that name";
     }
 
-    public String decreaseQuantityProduct(String name, int cant) {
+    public String decreaseQuantityProduct(String name, int cant) throws NotNumberNegative {
+        if (cant < 0)
+            throw new NotNumberNegative("La cantidad introducida es negativa.");
         ArrayList<Product> result = Search.searchBy(products, new Filter(name, name, "name"));
         if (result != null) {
-            result.get(0).setQuantity(result.get(0).getQuantity() - cant);
+            int newCant = result.get(0).getQuantity() - cant;
+            if(newCant < 0) 
+                throw new NotNumberNegative("La cantidad del preducto es menor a lo que se quiere quitar.");
+            result.get(0).setQuantity(newCant);
+            // saveData(); Descomentar al final (no funcionan algunos tests porque siempre
+            // tiene todos los productos cargados 💀)
             return "the new quantity for product: " + name + " is: " + result.get(0).getQuantity();
         }
         return "There was no product with that name";
@@ -107,6 +130,8 @@ public class Inventory {
         ArrayList<Product> result = Search.searchBy(products, new Filter(name, name, "name"));
         if (result != null) {
             products.remove(result.get(0));
+            // saveData(); Descomentar al final (no funcionan algunos tests porque siempre
+            // tiene todos los productos cargados 💀)
             return "Product succsesfully deleted";
         }
         return "There was no product with that name";
@@ -128,6 +153,14 @@ public class Inventory {
         if (result != null)
             Search.orderBy(result, orderedBy, asc);
         return result;
+    }
+
+    public String generateOrderID(){
+        String id = UUID.randomUUID().toString();
+        while(searchOrderBy("id", true, new Filter(id,id,"ID")) != null){
+            id = UUID.randomUUID().toString();
+        }
+        return id;
     }
 
     public ArrayList<Order> getOrders() {

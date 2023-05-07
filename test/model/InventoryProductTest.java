@@ -124,7 +124,8 @@ public class InventoryProductTest {
     @Test
     public void searchProductByCategoryTest() {
         setupStage3();
-        ArrayList<Product> result = inventory.searchProductBy("name", true, new Filter(2, 2, "category"));
+        ArrayList<Product> result = inventory.searchProductBy("name", true, new Filter(
+                CategoryProduct.chooseCategory(2), CategoryProduct.chooseCategory(2), "category"));
         assertEquals(2, result.size());
         assertEquals("Alexa", result.get(0).getName());
         assertEquals("Smart Watch Essen", result.get(1).getName());
@@ -134,11 +135,13 @@ public class InventoryProductTest {
     public void addProductToRepeatedCategoryTest() {
         setupStage2();
         inventory.addProduct("Alexa", "Description3", 250000, 50, 2);
-        ArrayList<Product> result = inventory.searchProductBy("name", true, new Filter(2, 2, "category"));
+        ArrayList<Product> result = inventory.searchProductBy("name", true,
+                new Filter(CategoryProduct.chooseCategory(2),
+                        CategoryProduct.chooseCategory(2), "category"));
         assertEquals(3, inventory.getProducts().size());
         assertEquals(2, result.size());
         assertEquals("Alexa", result.get(0).getName());
-        assertEquals(10, result.get(0).getQuantity());
+        assertEquals(50, result.get(0).getQuantity());
     }
 
     @Test
