@@ -2,6 +2,7 @@ package model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,6 +11,7 @@ import java.util.Date;
 
 import org.junit.Test;
 
+import exceptions.BadFormatDate;
 import util.Filter;
 
 public class InventoryOrderTest {
@@ -67,6 +69,49 @@ public class InventoryOrderTest {
         assertEquals(1, inventory.getOrders().size());
     }
 
+    @Test
+    public void createOrderWithBadFormatDate() throws ParseException {
+        setupStage1();
+        ArrayList<Product> orderOne = new ArrayList<>();
+        orderOne.add(new Product("A", "Descrip", 50, 2));
+        assertThrows(ParseException.class,
+                () -> inventory.addOrder("Alfonso", orderOne, "2022/01/67"));
+    }
+
+    @Test
+    public void createOrderWithBadFormatDate2() throws ParseException {
+        setupStage1();
+        ArrayList<Product> orderOne = new ArrayList<>();
+        orderOne.add(new Product("A", "Descrip", 50, 2));
+        assertThrows(ParseException.class,
+                () -> inventory.addOrder("Alfonso", orderOne, "01/12/AA67"));
+    }
+
+    @Test
+    public void createOrderWithBadFormatDate3() throws ParseException {
+        setupStage1();
+        ArrayList<Product> orderOne = new ArrayList<>();
+        orderOne.add(new Product("A", "Descrip", 50, 2));
+        assertThrows(ParseException.class,
+                () -> inventory.addOrder("Alfonso", orderOne, "2/2/xx2"));
+    }
+
+    @Test
+    public void createOrderWithBadFormatDate4() throws ParseException {
+        setupStage1();
+        ArrayList<Product> orderOne = new ArrayList<>();
+        orderOne.add(new Product("A", "Descrip", 50, 2));
+        assertThrows(ParseException.class,
+                () -> inventory.addOrder("Alfonso", orderOne, "2/y2x/2034"));
+    }
+
+
+    @Test
+    public void addProductWithWrongQuantity(){
+        setupStage1();
+        inventory.addProduct("chocokrispys","Cereal de choco", 18000, 5,4);
+        ArrayList<Product> order = new ArrayList<>();
+    }
     @Test
     public void addOrders() throws ParseException {
         setupStage2();
@@ -137,5 +182,53 @@ public class InventoryOrderTest {
                 new Filter ( 251000 , 80000, "total price"));
         assertEquals(2, result.size());
     }
+
+    @Test
+    public void ascendentInRangeDate() throws ParseException {
+        setupStage3();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date fin = dateFormat.parse("15/02/2022");
+        Date ini = dateFormat.parse("13/02/2022");
+        ArrayList<Order> result = inventory.searchOrderBy("name", true,
+                new Filter(fin,ini, "date"));
+        assertEquals(3, result.size());
+        assertEquals("Alfosno",result.get(0).getbName());
+        assertEquals("Enrique",result.get(1).getbName());
+        assertEquals("Pedro",result.get(2).getbName());
+    }
+
+    @Test
+    public void descendentInRangeDate() throws ParseException {
+        setupStage3();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date fin = dateFormat.parse("15/02/2022");
+        Date ini = dateFormat.parse("13/02/2022");
+        ArrayList<Order> result = inventory.searchOrderBy("name", false,
+                new Filter(fin,ini, "date"));
+        assertEquals(3, result.size());
+        assertEquals("Pedro",result.get(0).getbName());
+        assertEquals("Enrique",result.get(1).getbName());
+        assertEquals("Alfosno",result.get(2).getbName());
+    }
     
+    @Test
+    public void ascendentInRangeDateAndName() throws ParseException {
+        setupStage3();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        ArrayList<Order> result = inventory.searchOrderBy("date", true,
+                new Filter("F","A", "name"));
+        assertEquals(2, result.size());
+        assertEquals("Enrique",result.get(1).getbName());
+        assertEquals("Alfosno",result.get(0).getbName());
+    }
+    @Test
+    public void descendentInRangeDateAndName() throws ParseException {
+        setupStage3();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        ArrayList<Order> result = inventory.searchOrderBy("date", false,
+                new Filter("F","A", "name"));
+        assertEquals(2, result.size());
+        assertEquals("Alfosno",result.get(0).getbName());
+        assertEquals("Enrique",result.get(1).getbName());
+    }
 }
