@@ -68,7 +68,7 @@ public class Inventory {
     }
 
     public void addOrder(String bName, ArrayList<Product> list, String date) throws ParseException {
-        if (!list.isEmpty()) {
+        if(list != null && !list.isEmpty()){
             orders.add(new Order(bName, list, date));
             lessQuantityMorePurch(list);
         }
@@ -85,7 +85,8 @@ public class Inventory {
         }
     }
 
-    public String increaseQuantityProduct(String name, int cant) {
+    public String increaseQuantityProduct(String name, int cant) throws NotNumberNegative {
+        if(cant < 0) throw new NotNumberNegative("La cantidad introducida es negativa.");
         ArrayList<Product> result = Search.searchBy(products, new Filter(name, name, "name"));
         if (result != null) {
             result.get(0).setQuantity(result.get(0).getQuantity() + cant);
@@ -94,10 +95,15 @@ public class Inventory {
         return "There was no product with that name";
     }
 
-    public String decreaseQuantityProduct(String name, int cant) {
+    public String decreaseQuantityProduct(String name, int cant) throws NotNumberNegative {
+        if (cant < 0)
+            throw new NotNumberNegative("La cantidad introducida es negativa.");
         ArrayList<Product> result = Search.searchBy(products, new Filter(name, name, "name"));
         if (result != null) {
-            result.get(0).setQuantity(result.get(0).getQuantity() - cant);
+            int newCant = result.get(0).getQuantity() - cant;
+            if(newCant < 0) 
+                throw new NotNumberNegative("La cantidad del preducto es menor a lo que se quiere quitar.");
+            result.get(0).setQuantity(newCant);
             return "the new quantity for product: " + name + " is: " + result.get(0).getQuantity();
         }
         return "There was no product with that name";
