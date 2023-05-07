@@ -16,8 +16,8 @@ public class Search {
         ArrayList<T> elements = new ArrayList<>(array);
         ArrayList<T> result = null;
         Search.orderBy(elements, attribute, true);
-        int start = Search.findStartIndex(elements, top, attribute);
-        int finish = Search.findEndIndex(elements, bot, attribute);
+        int start = Search.findStartIndex(elements, bot, attribute);
+        int finish = Search.findEndIndex(elements, top, attribute);
         if (start != -1 && finish != -1) {
             result = new ArrayList<>();
             for (int i = start; i <= finish; i++) {

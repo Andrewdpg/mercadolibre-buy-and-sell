@@ -1,6 +1,7 @@
 package model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -64,9 +65,9 @@ public class InventoryProductTest {
     @Test
     public void increaseQuantityProduct() {
         setupStage3();
-        inventory.increaseQuantityProduct("Smart Watch Essen", 20);
+        inventory.increaseQuantityProduct("Smart Watch Essen", 10);
         int result = inventory.getProducts().get(0).getQuantity();
-        assertEquals(30, result);
+        assertEquals(20, result);
     }
 
     @Test
@@ -110,7 +111,7 @@ public class InventoryProductTest {
     @Test
     public void searchNonExistentTest() {
         setupStage1();
-        boolean result = inventory.productExists("Alexa");
+        boolean result = inventory.productExists("Mandarina");
         assertFalse(result);
     }
 
@@ -147,6 +148,72 @@ public class InventoryProductTest {
         assertEquals(1, result.size());
         assertEquals("Balon golty", result.get(0).getName());
     }
+
+    @Test
+    public void searchProductInRangePrice() {
+        setupStage3();
+        ArrayList<Product> result = inventory.searchProductBy("name", true, new Filter(
+                90000,70000, "price"));
+        assertEquals(1, result.size());
+        assertEquals("Balon golty", result.get(0).getName());
+    }
+
+    @Test
+    public void searchProductInRangeNonExistentPrice() {
+        setupStage3();
+        ArrayList<Product> result = inventory.searchProductBy("name", true, new Filter(
+                0, 100, "price"));
+        assertNull(null, result);
+    }
+
+    @Test
+    public void searchProductInRangeNonExistentName() {
+        setupStage2();
+        String ini="x";
+        String fin="y";
+        ArrayList<Product> result = inventory.searchProductBy("name", true, new Filter(
+                ini, fin, "name"));
+        assertNull(null, result);
+    }
+
+    @Test
+    public void searchProductInRangeName() {
+        setupStage2();
+        String ini="s";
+        String fin="n";
+        ArrayList<Product> result = inventory.searchProductBy("name", true, new Filter(
+                ini,fin, "name"));
+        assertEquals(1, result.size());
+        assertEquals("Smart Watch Essen", result.get(0).getName());
+    }
+
+    @Test
+    public void searchProductInAscendingWay() {
+        setupStage3();
+        int top=50;
+        int bot=0;
+        ArrayList<Product> result = inventory.searchProductBy("name", true, new Filter(
+                top,bot, "quantity"));
+        assertEquals(3, result.size());
+        assertEquals("Alexa", result.get(0).getName());
+        assertEquals("Balon golty", result.get(1).getName());
+        assertEquals("Smart Watch Essen", result.get(2).getName());
+    }
+
+    @Test
+    public void searchProductInDescendingWay() {
+        setupStage3();
+        int top=50;
+        int bot=0;
+        ArrayList<Product> result = inventory.searchProductBy("name", false, new Filter(
+                top,bot, "quantity"));
+        assertEquals(3, result.size());
+        assertEquals("Smart Watch Essen", result.get(0).getName());
+        assertEquals("Balon golty", result.get(1).getName());
+        assertEquals("Alexa", result.get(2).getName());
+    }
+
+
 
     @Test
     public void addProductToRepeatedCategoryTest() {

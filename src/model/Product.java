@@ -27,7 +27,7 @@ public class Product implements Compare<Product> {
             case "price":
                 return this.price.compareTo(other.price);
             case "name":
-                return this.name.compareTo(other.name);
+                return this.name.toLowerCase().compareTo(other.name.toLowerCase());
             case "quantity":
                 return this.quantity.compareTo(other.quantity);
             case "category":
@@ -43,7 +43,7 @@ public class Product implements Compare<Product> {
             case "price":
                 return this.price.compareTo(Double.valueOf(target.toString()));
             case "name":
-                return this.name.compareTo((String) target);
+                return this.name.toLowerCase().compareTo(((String) target).toLowerCase());
             case "quantity":
                 return this.quantity.compareTo((Integer) target);
             case "category":
