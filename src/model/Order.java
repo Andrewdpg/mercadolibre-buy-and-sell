@@ -16,12 +16,14 @@ public class Order implements Compare<Order> {
     private ArrayList<Product> list;
     private Double totalPrice;
     private Date purchasedDate;
+    private Integer totalProducts;
 
     public Order(String bName, String id, ArrayList<Product> list, String date) throws ParseException {
         this.bName = bName;
         this.id = id;
         this.list = list;
         this.totalPrice = calcTotal(list);
+        this.totalProducts = totalProducts(list);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         purchasedDate = dateFormat.parse(date);
     }
@@ -36,6 +38,9 @@ public class Order implements Compare<Order> {
 
             case "date":
                 return this.purchasedDate.compareTo(other.getPurchasedDate());
+
+            case "quantity":
+                return this.totalProducts.compareTo(other.totalProducts);
 
             case "id":
                 return this.id.compareTo(other.getId());
@@ -56,6 +61,8 @@ public class Order implements Compare<Order> {
 
             case "date":
                 return this.purchasedDate.compareTo((Date) target);
+            case "quantity":
+                return this.totalProducts.compareTo((int) target);
             case "id":
                 return this.id.compareTo((String) target);
             default:
@@ -69,6 +76,14 @@ public class Order implements Compare<Order> {
         double result = 0.0;
         for (Product p : list) {
             result += p.getPrice() * p.getQuantity();
+        }
+        return result;
+    }
+
+    public int totalProducts(ArrayList<Product> list) {
+        int result = 0;
+        for (Product p : list) {
+            result += p.getQuantity();
         }
         return result;
     }
@@ -113,4 +128,9 @@ public class Order implements Compare<Order> {
         this.id = id;
     }
 
+    @Override
+    public String toString() {
+        return "Comprador: " + bName + " - Número de productos: " + totalProducts + " - Precio total: " + totalPrice + " - Fecha de compra: "
+                + purchasedDate.toString();
+    }
 }

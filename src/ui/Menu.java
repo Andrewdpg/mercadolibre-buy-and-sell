@@ -31,12 +31,10 @@ public class Menu {
             + "1. Ascedente\n"
             + "2. Descendente";
     private final String FOURTHSEARCHPRODUCT_MENU = "Buscar producto por ésta característica:\n"
-            + "1. Nombre (Alfabético)\n"
-            + "2. Descripción (Alfabético)\n"
-            + "3. Categoria\n"
-            + "4. Precio\n"
-            + "5. Cantidad disponible\n"
-            + "6. Número de veces comprado";
+            + "1. Nombre\n"
+            + "2. Precio\n"
+            + "3. Categoría\n"
+            + "4. Número de veces comprados";
     private final String FOURTHSEARCHORDER_MENU = "Buscar orden por ésta característica:\n"
             + "1. Nombre del comprador (Alfabético)\n"
             + "2. Número de productos comprados\n"
@@ -113,9 +111,9 @@ public class Menu {
         if (result != null) {
             Product selected = result.get(0);
             if (selected.getQuantity() > 0) {
-                System.out.print("Cantidad del producto (" +selected.getQuantity() + " disponible): ");
+                System.out.print("Cantidad del producto (" + selected.getQuantity() + " disponible): ");
                 int cant = Reader.readInt(1, 1);
-                if (cant < selected.getQuantity()){
+                if (cant < selected.getQuantity()) {
                     Product product = new Product(selected.getName(), selected.getDesc(), selected.getPrice(), cant);
                     return product;
                 }
@@ -134,10 +132,22 @@ public class Menu {
         readOption();
         switch (option) {
             case 1:
-                searchProduct();
+                ArrayList<Product> products = searchProduct();
+                if (products != null && !products.isEmpty()) {
+                    System.out.println("Seleccione un producto: ");
+                    printListResult(products);
+                    actionAfterSearch(products);
+                } else {
+                    System.out.println("La busqueda no ha arrojado resultados.");
+                }
                 break;
             case 2:
-                searchOrder();
+                ArrayList<Order> orders = searchOrder();
+                if (orders != null && !orders.isEmpty()) {
+                    printListResult(orders);
+                } else {
+                    System.out.println("La busqueda no ha arrojado resultados.");
+                }
                 break;
             default:
                 System.out.println("Opción no válida");
@@ -146,30 +156,52 @@ public class Menu {
     }
 
     private ArrayList<Product> searchProduct() {
-        Object top = null, bot = null;
-        boolean asc = true;
-        String attr = null;
-        String variable = null;
+        System.out.println("Creemos los filtros de búsqueda:");
+        ArrayList<Filter> filters = new ArrayList<>();
+        while (filters.size() == 0 || option != 0) {
+            try {
+                System.out.println("¡Agreguemos un filtro! ");
+                Filter newFilter = createProductFilter();
+                if (newFilter != null) {
+                    filters.add(newFilter);
+                }
+                if (!filters.isEmpty()) {
+                    System.out.println("¿Quieres agregar un nuevo filtro?\n"
+                            + "   0. No\n"
+                            + "   Any other. Si");
+                    readOption();
+                }
+            } catch (ParseException e) {
+                System.out.println("Formato de fecha inválido. Filtro no agregado.");
+            }
+        }
         System.out.println(SECONDSEARCHPRODUCT_MENU);
         readOption();
+        String order = "name";
         switch (option) {
             case 1:
-                attr = "name";
+                order = "name";
                 break;
             case 2:
-                attr = "price";
+                order = "price";
                 break;
             case 3:
-                attr = "category";
+                order = "category";
                 break;
             case 4:
-                attr = "quantity";
+                order = "quantity";
                 break;
             default:
-                System.out.println("Opción no valida");
+                System.out.println("Opción no valida. Seleccionado: Nombre");
                 break;
         }
-        wayToSearch(asc);
+        boolean asc = wayToSearch();
+        return mercado.searchProductBy(order, asc, filters.toArray(new Filter[] {}));
+    }
+
+    private Filter createProductFilter() throws ParseException {
+        String variable = "name";
+        Object value, init, end;
         System.out.println(FOURTHSEARCHPRODUCT_MENU);
         readOption();
         switch (option) {
@@ -186,72 +218,175 @@ public class Menu {
                 variable = "quantity";
                 break;
             default:
-                System.out.println("Opción no valida");
+                System.out.println("Opción no valida. Seleccionado: Nombre");
                 break;
         }
-        return mercado.searchProductBy(attr, asc, new Filter(top, bot, variable));
+        System.out.print("Desea buscar:\n"
+                + "1. Valor fijo.\n"
+                + "2. En rango.\n");
+        readOption();
+        Filter filter = null;
+        switch (option) {
+            case 1:
+                System.out.println("Dame el valor a buscar: ");
+                value = Reader.readValue(variable);
+                filter = new Filter(value, value, variable);
+                break;
+            case 2:
+                System.out.println("Dame el valor inicial del rango de búsqueda: ");
+                init = Reader.readValue(variable);
+                System.out.println("Dame el valor final del rango de búsqueda: ");
+                end = Reader.readValue(variable);
+                filter = new Filter(end, init, variable);
+                break;
+            default:
+                System.out.println("Opción no valida. Seleccionado: Valor fijo");
+                System.out.println("Dame el valor a buscar: ");
+                value = Reader.readValue(variable);
+                filter = new Filter(value, value, variable);
+                break;
+        }
+        return filter;
+    }
+
+    private void actionAfterSearch(ArrayList<Product> result) {
+        System.out.println("0. SALIR");
+        int index = Reader.readInt(-1);
+        if (index == -1 || index > result.size())
+            System.out.println("Opción no válida, terminando proceso de búsqueda.");
+        if (index != 0) {
+            System.out.println(AFTERSEARCHPRODUCT_MENU);
+            readOption();
+            switch (option) {
+                case 1:
+                    int def = result.get(index - 1).getQuantity();
+                    System.out.println("Cantidad anterior: " + def);
+                    System.out.println("Nueva cantidad: ");
+                    int cant = Reader.readInt(def);
+                    if (cant >= 0) {
+                        if (cant <= def) {
+                            mercado.decreaseQuantityProduct(result.get(index - 1).getName(), def - cant);
+                        } else {
+                            mercado.increaseQuantityProduct(result.get(index - 1).getName(), cant - def);
+                        }
+                    } else {
+                        System.out.println("Cantidad inválida. producto no actualizado");
+                    }
+                    break;
+                case 2:
+                    mercado.deleteProduct(result.get(index - 1).getName());
+                    break;
+                default:
+                    System.out.println("Opción no válida, volviendo al menú principal.");
+                    break;
+            }
+        }
     }
 
     private ArrayList<Order> searchOrder() {
-        Object top, bot;
-        boolean asc = true;
-        String attr;
-        String variable;
+        System.out.println("Creemos los filtros de búsqueda:");
+        ArrayList<Filter> filters = new ArrayList<>();
+        while (filters.size() == 0 || option != 0) {
+            try {
+                System.out.println("¡Agreguemos un filtro! ");
+                Filter newFilter = createOrderFilter();
+                if (newFilter != null) {
+                    filters.add(newFilter);
+                }
+                if (!filters.isEmpty()) {
+                    System.out.println("¿Quieres agregar un nuevo filtro?\n"
+                            + "   0. No\n"
+                            + "   Any other. Si");
+                    readOption();
+                }
+            } catch (ParseException e) {
+                System.out.println("Formato de fecha inválido. Filtro no agregado.");
+            }
+        }
         System.out.println(SECONDSEARCHPRODUCT_MENU);
         readOption();
+        String order = "name";
         switch (option) {
             case 1:
-                attr = "name";
+                order = "name";
                 break;
             case 2:
-                attr = "price";
+                order = "quantity";
                 break;
             case 3:
-                attr = "category";
+                order = "total price";
                 break;
             case 4:
-                attr = "quantity";
+                order = "date";
                 break;
             default:
-                System.out.println("Opción no valida");
+                System.out.println("Opción no valida. Seleccionado: Nombre");
                 break;
         }
-        wayToSearch(asc);
-        System.out.println(FOURTHSEARCHPRODUCT_MENU);
+        boolean asc = wayToSearch();
+        return mercado.searchOrderBy(order, asc, filters.toArray(new Filter[] {}));
+    }
+
+    private Filter createOrderFilter() throws ParseException {
+        String variable = "name";
+        Object value, init, end;
+        System.out.println(FOURTHSEARCHORDER_MENU);
         readOption();
         switch (option) {
             case 1:
                 variable = "name";
                 break;
             case 2:
-                variable = "price";
-                break;
-            case 3:
-                variable = "category";
-                break;
-            case 4:
                 variable = "quantity";
                 break;
+            case 3:
+                variable = "total price";
+                break;
+            case 4:
+                variable = "date";
+                break;
             default:
-                System.out.println("Opción no valida");
+                System.out.println("Opción no valida. Seleccionado: Nombre");
                 break;
         }
-        return null;
+        System.out.print("Desea buscar:\n"
+                + "1. Valor fijo.\n"
+                + "2. En rango.\n");
+        readOption();
+        Filter filter = null;
+        switch (option) {
+            case 1:
+                System.out.println("Dame el valor a buscar: ");
+                value = Reader.readValue(variable);
+                filter = new Filter(value, value, variable);
+                break;
+            case 2:
+                System.out.println("Dame el valor inicial del rango de búsqueda: ");
+                init = Reader.readValue(variable);
+                System.out.println("Dame el valor final del rango de búsqueda: ");
+                end = Reader.readValue(variable);
+                filter = new Filter(end, init, variable);
+                break;
+            default:
+                System.out.println("Opción no valida. Seleccionado: Valor fijo");
+                System.out.println("Dame el valor a buscar: ");
+                value = Reader.readValue(variable);
+                filter = new Filter(value, value, variable);
+                break;
+        }
+        return filter;
     }
 
-    private void wayToSearch(boolean asc) {
+    private boolean wayToSearch() {
         System.out.println(THIRDSEARCH_MENU);
         readOption();
         switch (option) {
             case 1:
-                asc = true;
-                break;
+                return true;
             case 2:
-                asc = false;
-                break;
+                return false;
             default:
-                asc = true;
-                break;
+                return true;
         }
     }
 
@@ -267,12 +402,15 @@ public class Menu {
         switch (option) {
             case 1:
                 addProduct();
+                option = 1;
                 break;
             case 2:
                 addOrder();
+                option = 2;
                 break;
             case 3:
                 searchThing();
+                option = 3;
                 break;
             case 4:
                 isRunning = false;
@@ -290,5 +428,14 @@ public class Menu {
 
     public void readOption() {
         option = Reader.readInt(-1);
+    }
+
+    public void printListResult(ArrayList<?> list) {
+        if (list == null)
+            return;
+        System.out.println("Resultados de la búsqueda: ");
+        for (int i = 0; i < list.size(); i++) {
+            System.out.println((i + 1) + ". " + list.get(i).toString());
+        }
     }
 }

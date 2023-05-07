@@ -103,4 +103,10 @@ public class Product implements Compare<Product> {
         this.categories = categories;
     }
 
+    @Override
+    public String toString() {
+        return "Nombre: " + name + " - Cantidad disponible: " + quantity + " - Precio: " + price + " - Categoría: " + categories.name();
+    }
+
+    
 }
