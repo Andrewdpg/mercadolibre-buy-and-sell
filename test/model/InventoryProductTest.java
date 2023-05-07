@@ -12,7 +12,7 @@ import org.junit.Test;
 import exceptions.NotNumberNegative;
 import util.Filter;
 
-public class InventoryTest {
+public class InventoryProductTest {
     Inventory inventory;
 
     public void setupStage1() {
