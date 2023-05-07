@@ -132,6 +132,23 @@ public class InventoryProductTest {
     }
 
     @Test
+    public void searchProductByCategoryNonUsedTest() {
+        setupStage3();
+        ArrayList<Product> result = inventory.searchProductBy("name", true, new Filter(
+                CategoryProduct.chooseCategory(1), CategoryProduct.chooseCategory(1), "category"));
+        assertEquals(null, result);
+    }
+
+    @Test
+    public void searchProductByCategoryTest2() {
+        setupStage2();
+        ArrayList<Product> result = inventory.searchProductBy("name", true, new Filter(
+                CategoryProduct.chooseCategory(6), CategoryProduct.chooseCategory(6), "category"));
+        assertEquals(1, result.size());
+        assertEquals("Balon golty", result.get(0).getName());
+    }
+
+    @Test
     public void addProductToRepeatedCategoryTest() {
         setupStage2();
         inventory.addProduct("Alexa", "Description3", 250000, 50, 2);

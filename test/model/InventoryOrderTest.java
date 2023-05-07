@@ -92,4 +92,49 @@ public class InventoryOrderTest {
                 new Filter(purchasedDate, purchasedDate, "date"));
         assertEquals("Enrique",result.get(0).getbName());
     }
+
+    @Test
+    public void searchTotalPurchased() throws ParseException {
+        setupStage3();
+        ArrayList<Order> result = inventory.searchOrderBy("name", false, new Filter(10, 900000, "total price"));
+        assertEquals(4, result.size());
+    }
+
+    @Test
+    public void searchNotTotalPurchased() throws ParseException {
+        setupStage3();
+        ArrayList<Order> result = inventory.searchOrderBy("name", false, new Filter(1, 1, "total price"));
+        assertEquals(0, result.size());
+    }
+
+    @Test
+    public void searchOrderByInitialName() throws ParseException {
+        setupStage3();
+        ArrayList<Order> result = inventory.searchOrderBy("name", true, new Filter("A", "D", "name"));
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    public void searchOrderByInitialName2() throws ParseException {
+        setupStage3();
+        ArrayList<Order> result = inventory.searchOrderBy("name", true, new Filter("x", "z", "name"));
+        assertEquals(0, result.size());
+    }
+
+    @Test
+    public void ascendentPrice() throws ParseException {
+        setupStage3();
+        ArrayList<Order> result = inventory.searchOrderBy("total price", true,
+                new Filter("80000", "251000", "total price"));
+        assertEquals(3, result.size());
+    }
+
+    @Test
+    public void disorderPrice() throws ParseException {
+        setupStage3();
+        ArrayList<Order> result = inventory.searchOrderBy("total price", false,
+                new Filter("80000", "251000", "total price"));
+        assertEquals(3, result.size());
+    }
+    
 }
