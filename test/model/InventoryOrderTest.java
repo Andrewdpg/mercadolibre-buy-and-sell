@@ -96,7 +96,7 @@ public class InventoryOrderTest {
     @Test
     public void searchTotalPurchased() throws ParseException {
         setupStage3();
-        ArrayList<Order> result = inventory.searchOrderBy("name", false, new Filter(10, 900000, "total price"));
+        ArrayList<Order> result = inventory.searchOrderBy("name", false, new Filter(900000  ,10 , "total price"));
         assertEquals(4, result.size());
     }
 
@@ -104,7 +104,7 @@ public class InventoryOrderTest {
     public void searchNotTotalPurchased() throws ParseException {
         setupStage3();
         ArrayList<Order> result = inventory.searchOrderBy("name", false, new Filter(1, 1, "total price"));
-        assertEquals(0, result.size());
+        assertNull( result);
     }
 
     @Test
@@ -117,15 +117,15 @@ public class InventoryOrderTest {
     @Test
     public void searchOrderByInitialName2() throws ParseException {
         setupStage3();
-        ArrayList<Order> result = inventory.searchOrderBy("name", true, new Filter("x", "z", "name"));
-        assertEquals(0, result.size());
+        ArrayList<Order> result = inventory.searchOrderBy("name", true, new Filter("X", "Z", "name"));
+        assertNull( result);
     }
 
     @Test
     public void ascendentPrice() throws ParseException {
         setupStage3();
         ArrayList<Order> result = inventory.searchOrderBy("total price", true,
-                new Filter("80000", "251000", "total price"));
+                new Filter(251000   ,80000 , "total price"));
         assertEquals(3, result.size());
     }
 
@@ -133,7 +133,7 @@ public class InventoryOrderTest {
     public void disorderPrice() throws ParseException {
         setupStage3();
         ArrayList<Order> result = inventory.searchOrderBy("total price", false,
-                new Filter("80000", "251000", "total price"));
+                new Filter ( 251000 , 80000, "total price"));
         assertEquals(3, result.size());
     }
     
