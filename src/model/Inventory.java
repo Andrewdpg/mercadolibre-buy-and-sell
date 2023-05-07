@@ -93,7 +93,7 @@ public class Inventory {
                     new Filter(list.get(i).getName(), list.get(i).getName(), "name"));
             if (result != null) {
                 result.get(0).setQuantity(result.get(0).getQuantity() - list.get(i).getQuantity());
-                result.get(0).setQuantity(result.get(0).getPurchased() + list.get(i).getQuantity());
+                result.get(0).setPurchased(result.get(0).getPurchased() + list.get(i).getQuantity());
             }
         }
     }

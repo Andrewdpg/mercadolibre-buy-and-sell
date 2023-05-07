@@ -68,7 +68,7 @@ public class Order implements Compare<Order> {
     public double calcTotal(ArrayList<Product> list) {
         double result = 0.0;
         for (Product p : list) {
-            result += p.getPrice();
+            result += p.getPrice() + p.getQuantity();
         }
         return result;
     }
