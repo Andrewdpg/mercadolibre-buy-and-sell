@@ -19,5 +19,10 @@ Indicadores de calidad:
 
 - Iteración 4:
   - Densidad de errores-fallos = 0.48484848484
-  - Confiabilidad = 0.48484848484
+  - Confiabilidad = 0.51515151516
+  - Completitud = 3.3
+
+- Iteración 5:
+  - Densidad de errores-fallos = 0.36363636363
+  - Confiabilidad = 0.63636363637
   - Completitud = 3.3

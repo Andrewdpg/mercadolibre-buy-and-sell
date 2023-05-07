@@ -1,12 +1,12 @@
 package model;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.junit.Test;
 
@@ -87,10 +87,9 @@ public class InventoryOrderTest {
     public void searchOrder() throws ParseException {
         setupStage2();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        Date purchasedDate = dateFormat.parse("12/02/2022");
-
-        assertNotNull(inventory.searchOrderBy("name", true,
-                new Filter(new SimpleDateFormat("14/02/2022"), new SimpleDateFormat("14/02/2022"), "date")));
-
+        Date purchasedDate = dateFormat.parse("14/02/2022");
+        ArrayList<Order> result = inventory.searchOrderBy("name", true,
+                new Filter(purchasedDate, purchasedDate, "date"));
+        assertEquals("Enrique",result.get(0).getbName());
     }
 }
