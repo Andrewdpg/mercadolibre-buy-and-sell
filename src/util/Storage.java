@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Type;
 
 import com.google.gson.Gson;
 
@@ -28,7 +29,7 @@ public class Storage {
         return true;
     }
 
-    public static <T> T loadJsonFrom(String path, Class<T> type) throws IOException {
+    public static <T> T loadJsonFrom(String path, Type type) throws IOException {
         File file = new File(FOLDER_PATH + path);
         if (!file.exists()) {
             return null;

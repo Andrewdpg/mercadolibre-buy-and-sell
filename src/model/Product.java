@@ -30,6 +30,8 @@ public class Product implements Compare<Product> {
                 return this.name.compareTo(other.name);
             case "quantity":
                 return this.quantity.compareTo(other.quantity);
+            case "category":
+                return this.categories.compareTo(other.categories);
             default:
                 break;
         }
@@ -44,6 +46,8 @@ public class Product implements Compare<Product> {
                 return this.name.compareTo((String) target);
             case "quantity":
                 return this.quantity.compareTo((Integer) target);
+            case "category":
+                return this.categories.compareTo((CategoryProduct) target);
             default:
                 break;
         }
@@ -98,5 +102,5 @@ public class Product implements Compare<Product> {
     public void setCategories(CategoryProduct categories) {
         this.categories = categories;
     }
-    
+
 }
