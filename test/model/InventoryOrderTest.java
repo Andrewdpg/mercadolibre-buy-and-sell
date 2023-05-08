@@ -1,8 +1,10 @@
 package model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -230,5 +232,44 @@ public class InventoryOrderTest {
         assertEquals(2, result.size());
         assertEquals("Alfosno",result.get(0).getbName());
         assertEquals("Enrique",result.get(1).getbName());
+    }
+
+    @Test
+    public void compareOrders(){
+        setupStage1();
+        ArrayList<Product>  order1 = new ArrayList<>();
+        order1.add(new Product("product", "Descript", 80000, 5));
+
+        ArrayList<Product>  order2 = new ArrayList<>();
+        order2.add(new Product("product2", "Descript", 20000, 2));
+
+            assertTrue(order1.get(0).compare(order2.get(0),"price")>0);
+        
+    }
+
+    @Test
+    public void compareOrders2(){
+        setupStage1();
+        ArrayList<Product>  order1 = new ArrayList<>();
+        order1.add(new Product("product", "Descript", 80000, 5));
+
+        ArrayList<Product>  order2 = new ArrayList<>();
+        order2.add(new Product("product2", "Descript", 20000, 2));
+
+            assertFalse(order1.get(0).compare(order2.get(0),"price")<0);
+        
+    }
+
+    @Test
+    public void compareOrders3(){
+        setupStage1();
+        ArrayList<Product>  order1 = new ArrayList<>();
+        order1.add(new Product("product", "Descript", 80000, 5));
+
+        ArrayList<Product>  order2 = new ArrayList<>();
+        order2.add(new Product("product2", "Descript", 20000, 2));
+
+            assertTrue(order1.get(0).compare(order2.get(0),"name")<0);
+        
     }
 }
