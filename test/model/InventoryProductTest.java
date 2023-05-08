@@ -179,10 +179,8 @@ public class InventoryProductTest {
     @Test
     public void searchProductInRangeName() {
         setupStage2();
-        String ini="s";
-        String fin="n";
         ArrayList<Product> result = inventory.searchProductBy("name", true, new Filter(
-                ini,fin, "name"));
+                "t","n", "name"));
         assertEquals(1, result.size());
         assertEquals("Smart Watch Essen", result.get(0).getName());
     }
@@ -213,6 +211,33 @@ public class InventoryProductTest {
         assertEquals("Alexa", result.get(2).getName());
     }
 
+    @Test
+    public void searchProductInRangeNegative() {
+        setupStage3();
+        ArrayList<Product> result = inventory.searchProductBy("name", false, new Filter(
+                -5,-10000, "quantity"));
+        assertNull(null, result);
+    }
+
+    @Test
+    public void searchProductInPriceCategoryDescending() {
+        setupStage2();
+        ArrayList<Product> result = inventory.searchProductBy("category", false, new Filter(
+                251000,80000, "price"));  
+        assertEquals(2, result.size());
+        assertEquals("Balon golty", result.get(0).getName());
+        assertEquals("Smart Watch Essen", result.get(1).getName());
+    }
+
+    @Test
+    public void searchProductInPriceCategoryAscending() {
+        setupStage2();
+        ArrayList<Product> result = inventory.searchProductBy("category", true, new Filter(
+                251000,80000, "price"));  
+        assertEquals(2, result.size());
+        assertEquals("Smart Watch Essen", result.get(0).getName());
+        assertEquals("Balon golty", result.get(1).getName());
+    }
 
 
     @Test
