@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 import com.google.gson.reflect.TypeToken;
@@ -77,14 +78,34 @@ public class Inventory {
         }
     }
 
-    public void addOrder(String bName, ArrayList<Product> list, String date) throws ParseException {
-        if(list != null && !list.isEmpty()){
+    public void addOrder(String bName, ArrayList<Product> list, String date) throws ParseException, NotNumberNegative {
+        if (list != null && !list.isEmpty()) {
+            validateQuantities(list);
             Order order = new Order(bName, generateOrderID(), list, date);
             orders.add(order);
             System.out.println("orden generada con ID: " + order.getId());
             lessQuantityMorePurch(list);
-            // saveData(); Descomentar al final (no funcionan algunos tests porque siempre
-                       // tiene todos los productos cargados 💀)
+            saveData();
+        }
+    }
+
+    private void validateQuantities(ArrayList<Product> list) {
+        HashMap<String, Integer> map = new HashMap<>();
+        for (Product product : list.toArray(new Product[] {})) {
+            if (map.containsKey(product.getName()))
+                map.put(product.getName(), product.getQuantity() + map.get(product.getName()));
+            else {
+                map.put(product.getName(), product.getQuantity());
+            }
+        }
+        for (String key : map.keySet()) {
+            ArrayList<Product> result = Search.searchBy(products, new Filter(key, key, "name"));
+            if(result != null && !result.isEmpty()){
+                if(result.get(0).getQuantity() < map.get(key))
+                    throw new NotNumberNegative("Las cantidades son inválidas");
+            }else{
+                throw new NotNumberNegative("Las cantidades son inválidas");
+            }
         }
     }
 

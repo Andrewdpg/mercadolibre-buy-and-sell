@@ -12,6 +12,7 @@ import java.util.Date;
 import org.junit.Test;
 
 import exceptions.BadFormatDate;
+import exceptions.NotNumberNegative;
 import util.Filter;
 
 public class InventoryOrderTest {
@@ -111,6 +112,9 @@ public class InventoryOrderTest {
         setupStage1();
         inventory.addProduct("chocokrispys","Cereal de choco", 18000, 5,4);
         ArrayList<Product> order = new ArrayList<>();
+        order.add(new Product("chocokrispys","Cereal de choco", 18000, 15));
+        assertThrows(NotNumberNegative.class,
+                ()-> inventory.addOrder("Mads", order, "12/05/2022"));
     }
     @Test
     public void addOrders() throws ParseException {
