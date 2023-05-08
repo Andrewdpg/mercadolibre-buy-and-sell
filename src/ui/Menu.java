@@ -60,7 +60,7 @@ public class Menu {
         System.out.println("Descripción del producto: ");
         desc = Reader.readString();
         System.out.println("Precio del producto:");
-        price = Reader.readDouble();
+        price = Reader.readDouble(5.0);
         System.out.println("Unidades disponibles: ");
         quantity = Reader.readInt(0);
         System.out.println("Elige la categoría del producto: ");

@@ -49,11 +49,16 @@ public class Reader {
     }
 
     public static String readString() {
-        return reader.next();
+        return new Scanner(System.in).nextLine();
     }
 
-    public static Double readDouble() {
-        return reader.nextDouble();
+    public static Double readDouble(double def) {
+        try {
+            return reader.nextDouble();
+        } catch (Exception e) {
+            System.out.println("Entrada inválida, valor tomado:" + def);
+            return def;
+        }
     }
 
     // Lee un caracter
@@ -82,7 +87,7 @@ public class Reader {
             case "name":
                 return readString();
             case "total price":
-                return readDouble();
+                return readDouble(5.0);
             case "date":
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                 dateFormat.setLenient(false);
@@ -91,7 +96,7 @@ public class Reader {
             case "id":
                 return readString();
             case "price":
-                return readDouble();
+                return readDouble(5.0);
             case "quantity":
                 return readInt(0, 0);
             case "category":
