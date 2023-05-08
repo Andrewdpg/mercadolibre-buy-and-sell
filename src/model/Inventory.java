@@ -61,7 +61,7 @@ public class Inventory {
         }
     }
 
-    public void addProduct(String name, String desc, double price, int quantity, int category) {
+    public void addProduct(String name, String desc, double price, int quantity, int category) throws NotNumberNegative {
         boolean search;
         if (quantity < 0 || price < 0.0) {
             throw new NotNumberNegative();
@@ -89,7 +89,7 @@ public class Inventory {
         }
     }
 
-    private void validateQuantities(ArrayList<Product> list) {
+    private void validateQuantities(ArrayList<Product> list) throws NotNumberNegative {
         HashMap<String, Integer> map = new HashMap<>();
         for (Product product : list.toArray(new Product[] {})) {
             if (map.containsKey(product.getName()))
