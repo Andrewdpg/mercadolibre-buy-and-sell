@@ -3,6 +3,7 @@ package ui;
 import java.text.ParseException;
 import java.util.ArrayList;
 
+import exceptions.NotNumberNegative;
 import model.CategoryProduct;
 import model.Inventory;
 import model.Order;
@@ -22,11 +23,6 @@ public class Menu {
             + "2. Precio\n"
             + "3. Categoría\n"
             + "4. Número de veces comprados";
-    private final String SECONDSEARCHORDER_MENU = "Buscar por:\n"
-            + "1. Nombre del comprador\n"
-            + "2. Precio total\n"
-            + "3. Fecha de compra\n"
-            + "4. Veces compradas";
     private final String THIRDSEARCH_MENU = "Buscar de manera:\n"
             + "1. Ascedente\n"
             + "2. Descendente";
@@ -54,7 +50,7 @@ public class Menu {
         mercado = new Inventory();
     }
 
-    private void addProduct() {
+    private void addProduct() throws NotNumberNegative {
         String name, desc;
         int cat;
         double price;
@@ -73,7 +69,7 @@ public class Menu {
         mercado.addProduct(name, desc, price, quantity, cat);
     }
 
-    private void addOrder() {
+    private void addOrder() throws NotNumberNegative {
         String name, date;
         System.out.println("Nombre del comprador: ");
         name = Reader.readString();
@@ -127,7 +123,7 @@ public class Menu {
         return null;
     }
 
-    private void searchThing() {
+    private void searchThing() throws NotNumberNegative {
         System.out.println(FIRSTSEARCH_MENU);
         readOption();
         switch (option) {
@@ -249,7 +245,7 @@ public class Menu {
         return filter;
     }
 
-    private void actionAfterSearch(ArrayList<Product> result) {
+    private void actionAfterSearch(ArrayList<Product> result) throws NotNumberNegative {
         System.out.println("0. SALIR");
         int index = Reader.readInt(-1);
         if (index == -1 || index > result.size())
@@ -269,6 +265,7 @@ public class Menu {
                         } else {
                             mercado.increaseQuantityProduct(result.get(index - 1).getName(), cant - def);
                         }
+
                     } else {
                         System.out.println("Cantidad inválida. producto no actualizado");
                     }
@@ -399,26 +396,30 @@ public class Menu {
     }
 
     private void executeMainMenu() {
-        switch (option) {
-            case 1:
-                addProduct();
-                option = 1;
-                break;
-            case 2:
-                addOrder();
-                option = 2;
-                break;
-            case 3:
-                searchThing();
-                option = 3;
-                break;
-            case 4:
-                isRunning = false;
-                System.out.println("Cerrando...");
-                break;
-            default:
-                System.out.println("Opción no reconocida");
-                break;
+        try {
+            switch (option) {
+                case 1:
+                    addProduct();
+                    option = 1;
+                    break;
+                case 2:
+                    addOrder();
+                    option = 2;
+                    break;
+                case 3:
+                    searchThing();
+                    option = 3;
+                    break;
+                case 4:
+                    isRunning = false;
+                    System.out.println("Cerrando...");
+                    break;
+                default:
+                    System.out.println("Opción no reconocida");
+                    break;
+            }
+        } catch (NotNumberNegative e) {
+            System.out.println("Número inválido.");
         }
     }
 
