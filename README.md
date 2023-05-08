@@ -1,5 +1,7 @@
 "# mercadolibre-buy-and-sell"
 
+Nota: Para correr los tests se debe comentar/deshabilitar la persistencia debido a que cargaría los datos guardados y generaría errores en las pruebas (la clase con persistencia deshabilitada está en la carpeta temp).
+
 Indicadores de calidad:
 
 - Iteración 1:
@@ -48,7 +50,7 @@ Indicadores de calidad:
     - Completitud = 3.5
   
 
-  - Iteracion 10:
+- Iteracion 10:
     - Densidad de errores-fallos = 0
     - Confiabilidad = 1
     - Completitud = 5

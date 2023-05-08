@@ -13,7 +13,6 @@ import java.util.Date;
 
 import org.junit.Test;
 
-import exceptions.BadFormatDate;
 import exceptions.NotNumberNegative;
 import util.Filter;
 
@@ -22,10 +21,15 @@ public class InventoryOrderTest {
 
     public void setupStage1() {
         inventory = new Inventory();
+        inventory.addProduct("A", "desc", 50, 100, 3);
     }
 
     public void setupStage2() throws ParseException {
         inventory = new Inventory();
+
+        inventory.addProduct("A", "desc", 5, 100, 3);
+        inventory.addProduct("B", "desc", 5, 100, 3);
+        inventory.addProduct("C", "desc", 5, 100, 3);
 
         ArrayList<Product> productsA = new ArrayList<>();
         productsA.add(new Product("A", "desc", 5, 10));
@@ -40,6 +44,11 @@ public class InventoryOrderTest {
 
     public void setupStage3() throws ParseException {
         inventory = new Inventory();
+        inventory.addProduct("A", "desc", 250000, 100, 3);
+        inventory.addProduct("B", "desc", 15000, 100, 3);
+        inventory.addProduct("C", "desc", 80000, 100, 3);
+        inventory.addProduct("D", "desc", 13000, 100, 3);
+        inventory.addProduct("F", "desc", 500000, 100, 3);
 
         ArrayList<Product> orderA = new ArrayList<>();
         orderA.add(new Product("A", "Descrip", 250000, 1));
@@ -108,16 +117,16 @@ public class InventoryOrderTest {
                 () -> inventory.addOrder("Alfonso", orderOne, "2/y2x/2034"));
     }
 
-
     @Test
-    public void addProductWithWrongQuantity(){
+    public void addProductWithWrongQuantity() {
         setupStage1();
-        inventory.addProduct("chocokrispys","Cereal de choco", 18000, 5,4);
+        inventory.addProduct("chocokrispys", "Cereal de choco", 18000, 5, 4);
         ArrayList<Product> order = new ArrayList<>();
-        order.add(new Product("chocokrispys","Cereal de choco", 18000, 15));
+        order.add(new Product("chocokrispys", "Cereal de choco", 18000, 15));
         assertThrows(NotNumberNegative.class,
-                ()-> inventory.addOrder("Mads", order, "12/05/2022"));
+                () -> inventory.addOrder("Mads", order, "12/05/2022"));
     }
+
     @Test
     public void addOrders() throws ParseException {
         setupStage2();
@@ -141,13 +150,13 @@ public class InventoryOrderTest {
         Date purchasedDate = dateFormat.parse("14/02/2022");
         ArrayList<Order> result = inventory.searchOrderBy("name", true,
                 new Filter(purchasedDate, purchasedDate, "date"));
-        assertEquals("Enrique",result.get(0).getbName());
+        assertEquals("Enrique", result.get(0).getbName());
     }
 
     @Test
     public void searchTotalPurchased() throws ParseException {
         setupStage3();
-        ArrayList<Order> result = inventory.searchOrderBy("name", false, new Filter(900000  ,10 , "total price"));
+        ArrayList<Order> result = inventory.searchOrderBy("name", false, new Filter(900000, 10, "total price"));
         assertEquals(4, result.size());
     }
 
@@ -155,10 +164,9 @@ public class InventoryOrderTest {
     public void searchNotTotalPurchased() throws ParseException {
         setupStage3();
         ArrayList<Order> result = inventory.searchOrderBy("name", false, new Filter(1, 1, "total price"));
-        assertNull( result);
+        assertNull(result);
     }
 
-    
     @Test
     public void searchOrderByInitialName() throws ParseException {
         setupStage3();
@@ -170,14 +178,14 @@ public class InventoryOrderTest {
     public void searchOrderByInitialName2() throws ParseException {
         setupStage3();
         ArrayList<Order> result = inventory.searchOrderBy("name", true, new Filter("z", "x", "name"));
-        assertNull( result);
+        assertNull(result);
     }
 
     @Test
     public void ascendentPrice() throws ParseException {
         setupStage3();
         ArrayList<Order> result = inventory.searchOrderBy("total price", true,
-                new Filter(251000   ,80000 , "total price"));
+                new Filter(251000, 80000, "total price"));
         assertEquals(2, result.size());
     }
 
@@ -185,7 +193,7 @@ public class InventoryOrderTest {
     public void disorderPrice() throws ParseException {
         setupStage3();
         ArrayList<Order> result = inventory.searchOrderBy("total price", false,
-                new Filter ( 251000 , 80000, "total price"));
+                new Filter(251000, 80000, "total price"));
         assertEquals(2, result.size());
     }
 
@@ -196,11 +204,11 @@ public class InventoryOrderTest {
         Date fin = dateFormat.parse("15/02/2022");
         Date ini = dateFormat.parse("13/02/2022");
         ArrayList<Order> result = inventory.searchOrderBy("name", true,
-                new Filter(fin,ini, "date"));
+                new Filter(fin, ini, "date"));
         assertEquals(3, result.size());
-        assertEquals("Alfosno",result.get(0).getbName());
-        assertEquals("Enrique",result.get(1).getbName());
-        assertEquals("Pedro",result.get(2).getbName());
+        assertEquals("Alfosno", result.get(0).getbName());
+        assertEquals("Enrique", result.get(1).getbName());
+        assertEquals("Pedro", result.get(2).getbName());
     }
 
     @Test
@@ -210,70 +218,71 @@ public class InventoryOrderTest {
         Date fin = dateFormat.parse("15/02/2022");
         Date ini = dateFormat.parse("13/02/2022");
         ArrayList<Order> result = inventory.searchOrderBy("name", false,
-                new Filter(fin,ini, "date"));
+                new Filter(fin, ini, "date"));
         assertEquals(3, result.size());
-        assertEquals("Pedro",result.get(0).getbName());
-        assertEquals("Enrique",result.get(1).getbName());
-        assertEquals("Alfosno",result.get(2).getbName());
+        assertEquals("Pedro", result.get(0).getbName());
+        assertEquals("Enrique", result.get(1).getbName());
+        assertEquals("Alfosno", result.get(2).getbName());
     }
-    
+
     @Test
     public void ascendentInRangeDateAndName() throws ParseException {
         setupStage3();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         ArrayList<Order> result = inventory.searchOrderBy("date", true,
-                new Filter("F","A", "name"));
+                new Filter("F", "A", "name"));
         assertEquals(2, result.size());
-        assertEquals("Enrique",result.get(1).getbName());
-        assertEquals("Alfosno",result.get(0).getbName());
+        assertEquals("Enrique", result.get(1).getbName());
+        assertEquals("Alfosno", result.get(0).getbName());
     }
+
     @Test
     public void descendentInRangeDateAndName() throws ParseException {
         setupStage3();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         ArrayList<Order> result = inventory.searchOrderBy("date", false,
-                new Filter("F","A", "name"));
+                new Filter("F", "A", "name"));
         assertEquals(2, result.size());
-        assertEquals("Alfosno",result.get(0).getbName());
-        assertEquals("Enrique",result.get(1).getbName());
+        assertEquals("Alfosno", result.get(0).getbName());
+        assertEquals("Enrique", result.get(1).getbName());
     }
 
     @Test
-    public void compareOrders(){
+    public void compareOrders() {
         setupStage1();
-        ArrayList<Product>  order1 = new ArrayList<>();
+        ArrayList<Product> order1 = new ArrayList<>();
         order1.add(new Product("product", "Descript", 80000, 5));
 
-        ArrayList<Product>  order2 = new ArrayList<>();
+        ArrayList<Product> order2 = new ArrayList<>();
         order2.add(new Product("product2", "Descript", 20000, 2));
 
-            assertTrue(order1.get(0).compare(order2.get(0),"price")>0);
-        
+        assertTrue(order1.get(0).compare(order2.get(0), "price") > 0);
+
     }
 
     @Test
-    public void compareOrders2(){
+    public void compareOrders2() {
         setupStage1();
-        ArrayList<Product>  order1 = new ArrayList<>();
+        ArrayList<Product> order1 = new ArrayList<>();
         order1.add(new Product("product", "Descript", 80000, 5));
 
-        ArrayList<Product>  order2 = new ArrayList<>();
+        ArrayList<Product> order2 = new ArrayList<>();
         order2.add(new Product("product2", "Descript", 20000, 2));
 
-            assertFalse(order1.get(0).compare(order2.get(0),"price")<0);
-        
+        assertFalse(order1.get(0).compare(order2.get(0), "price") < 0);
+
     }
 
     @Test
-    public void compareOrders3(){
+    public void compareOrders3() {
         setupStage1();
-        ArrayList<Product>  order1 = new ArrayList<>();
+        ArrayList<Product> order1 = new ArrayList<>();
         order1.add(new Product("product", "Descript", 80000, 5));
 
-        ArrayList<Product>  order2 = new ArrayList<>();
+        ArrayList<Product> order2 = new ArrayList<>();
         order2.add(new Product("product2", "Descript", 20000, 2));
 
-            assertTrue(order1.get(0).compare(order2.get(0),"name")<0);
-        
+        assertTrue(order1.get(0).compare(order2.get(0), "name") < 0);
+
     }
 }
